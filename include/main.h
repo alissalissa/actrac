@@ -3,10 +3,18 @@
 
 #include <wx/wx.h>
 
+#include "mainframe.h"
+
 class AcTrac : public wxApp {
+private:
+
+	MainFrame *main_frame;
+
 public:
 
-	//AcTrac(void);
+	bool OnInit(void);
+
+	virtual ~AcTrac()=default;
 
 };
 
