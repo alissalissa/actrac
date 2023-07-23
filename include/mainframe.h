@@ -46,16 +46,13 @@ private:
 	wxMenu* file_menu;
 	// Virtual event handlers, override them in your derived class
 	//virtual void OnEditEvent( wxCommandEvent& event ) { event.Skip(); }
-	//virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
+	virtual void OnQuit( wxCommandEvent& );
 
 public:
 
 	MainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1000,700 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL|wxVSCROLL );
 
 	virtual ~MainFrame()=default;
-
-	//Events
-	void OnQuit(wxCommandEvent&);
 
 };
 
