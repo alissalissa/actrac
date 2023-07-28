@@ -18,7 +18,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
 	otd_activities = new wxDataViewCtrl( tracker_panel, wxID_ANY, wxDefaultPosition, wxSize( 700,500 ), 0 );
-	activity_name = otd_activities->AppendTextColumn( wxT("Activity"), 0, wxDATAVIEW_CELL_INERT, 300, static_cast<wxAlignment>(wxALIGN_LEFT), wxDATAVIEW_COL_RESIZABLE );
+	activity_name = otd_activities->AppendTextColumn( wxT("Activity"), 0, wxDATAVIEW_CELL_INERT, 400, static_cast<wxAlignment>(wxALIGN_LEFT), wxDATAVIEW_COL_RESIZABLE );
 	activity_time = otd_activities->AppendTextColumn( wxT("Hours"), 0, wxDATAVIEW_CELL_INERT, 300, static_cast<wxAlignment>(wxALIGN_LEFT), wxDATAVIEW_COL_RESIZABLE );
 	bSizer4->Add( otd_activities, 0, wxALL|wxEXPAND, 5 );
 
@@ -48,7 +48,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
 
 	m_calendar1 = new wxCalendarCtrl( tracker_panel, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxCAL_SHOW_HOLIDAYS );
-	bSizer5->Add( m_calendar1, 0, wxALL, 5 );
+	bSizer5->Add( m_calendar1, 0, wxALL|wxALIGN_RIGHT, 5 );
 
 
 	bSizer2->Add( bSizer5, 1, wxEXPAND, 5 );
