@@ -5,9 +5,9 @@ WX_LIBS=`/usr/wx3.2.2.1/wx-dynamic-build/wx-config --libs`
 
 default: main
 
-main: main.o mainframe.o
+main: main.o mainframe.o acdate.o
 	$(INFO compiling.....)
-	g++ -g -o actrac $(WX_LIBS) main.o mainframe.o
+	g++ -g -o actrac $(WX_LIBS) main.o mainframe.o acdate.o
 
 main.o:
 	$(INFO compiling main.cpp)
@@ -16,6 +16,10 @@ main.o:
 mainframe.o:
 	$(INFO compiling mainframe.cpp)
 	g++ -g -c -o mainframe.o $(WX_INCLUDE_PATH) -I../include ../src/mainframe.cpp
+
+acdate.o:
+	$(INFO compiling acdate.cpp)
+	g++ -g -c -o acdate.o $(WX_INCLUDE_PATH) -I../include ../src/acdate.cpp
 
 clean:
 	rm *.o actrac
