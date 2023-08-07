@@ -11,7 +11,7 @@ date::date(short d,month_t m,short y){
 	year=y;
 }
 
-date::date(const wxDateTime haystack){
+date::date(const wxDateTime &haystack){
 	day=haystack.GetDay();
 	month=static_cast<month_t>(haystack.GetMonth());
 	year=haystack.GetYear();

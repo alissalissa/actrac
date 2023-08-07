@@ -40,7 +40,7 @@ public:
 	//Constructors/destructors
 	date(void)=default;
 	date(short,month_t,short);
-	date(const wxDateTime);
+	date(const wxDateTime&);
 	date(date&);
 	~date(void)=default;
 
