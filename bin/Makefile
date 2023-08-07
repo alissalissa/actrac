@@ -9,15 +9,15 @@ main: main.o mainframe.o acdate.o activity.o
 	$(INFO compiling.....)
 	g++ -g -o actrac $(WX_LIBS) main.o mainframe.o acdate.o activity.o
 
-main.o:
+main.o: mainframe.o
 	$(INFO compiling main.cpp)
 	g++ -g -c -o main.o $(WX_INCLUDE_PATH) -I../include ../src/main.cpp
 
-mainframe.o:
+mainframe.o: acdate.o
 	$(INFO compiling mainframe.cpp)
 	g++ -g -c -o mainframe.o $(WX_INCLUDE_PATH) -I../include ../src/mainframe.cpp
 
-acdate.o:
+acdate.o: activity.o
 	$(INFO compiling acdate.cpp)
 	g++ -g -c -o acdate.o $(WX_INCLUDE_PATH) -I../include ../src/acdate.cpp
 

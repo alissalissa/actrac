@@ -97,6 +97,20 @@ date &date::operator=(date &haystack){
 
 /************************END OPERATORS****************/
 
+//Container Management
+void date::AddActivity(Activity a){
+	activities.push_back(a);
+}
+
+void date::AddActivity(std::string l,std::string *t,float h,bool c,int r,int rf){
+	Activity ac(l,t,h,c,r,rf);
+	activities.push_back(ac);
+}
+
+void date::RemoveActivity(std::string lab){
+	
+}
+
 //Utilities
 std::vector<std::string> date::split(std::string h,std::string delimiter){
 	std::string haystack(h);

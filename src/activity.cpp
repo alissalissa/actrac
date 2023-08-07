@@ -43,7 +43,7 @@ void Activity::RemoveTag(std::string tbr){
 	int index=search(tags,tbr);
 	while(index!=-1){
 		std::vector<std::string>::iterator it=tags.begin();
-		for(int i=0;i<index;i++)
+		for(int i=0;i<index && it!=tags.end();i++)
 			++it;
 		tags.erase(it);
 		index=search(tags,tbr);
@@ -69,6 +69,36 @@ std::vector <Activity> Activity::propogate(void){
 		}
 	}
 	return ret;
+}
+
+//Operators
+Activity &Activity::operator=(Activity &haystack){
+	label=haystack.Label();
+	tags=haystack.Tags();
+	hours=haystack.Hours();
+	confirmed=haystack.is_confirmed();
+	recurrences=haystack.Recurences();
+	recurrence_frq=haystack.RecurrenceFrequency();
+	return haystack;
+}
+
+bool Activity::operator==(Activity &haystack){
+	if(haystack.Label()!=label)
+		return false;
+	if(haystack.Tags().size()!=tags.size())
+		return false;
+	for(int i=0;i<tags.size();i++)
+		if(tags[i]!=haystack.Tags()[i])
+			return false;
+	if(haystack.Hours()!=hours)
+		return false;
+	if(haystack.is_confirmed()!=confirmed)
+		return false;
+	if(haystack.Recurences()!=recurrences)
+		return false;
+	if(haystack.RecurrenceFrequency()!=recurrence_frq)
+		return false;
+	return true;
 }
 
 //Utilities
