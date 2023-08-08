@@ -9,9 +9,12 @@
 #include <string>
 #include <vector>
 
+#include "idgen.h"
+
 class Activity {
 private:
 
+	ActivityID id;
 	std::string label;
 	std::vector<std::string> tags;
 	float hours;

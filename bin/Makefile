@@ -7,7 +7,7 @@ default: main
 
 main: main.o mainframe.o acdate.o activity.o
 	$(INFO compiling.....)
-	g++ -g -o actrac $(WX_LIBS) main.o mainframe.o acdate.o activity.o
+	g++ -g -o actrac $(WX_LIBS) main.o mainframe.o acdate.o activity.o idgen.o
 
 main.o: mainframe.o
 	$(INFO compiling main.cpp)
@@ -21,9 +21,13 @@ acdate.o: activity.o
 	$(INFO compiling acdate.cpp)
 	g++ -g -c -o acdate.o $(WX_INCLUDE_PATH) -I../include ../src/acdate.cpp
 
-activity.o:
+activity.o: idgen.o
 	$(INFO compiling activity.cpp)
 	g++ -g -c -o activity.o -I../include ../src/activity.cpp
+
+idgen.o:
+	$(INFO compiling idgen.cpp)
+	g++ -g -c -o idgen.o -I../include ../src/idgen.cpp
 
 clean:
 	rm *.o actrac

@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "/usr/wx3.2.2.1/include**",
                 "/usr/wx3.2.2.1/include/msvc**",
-                "/usr/wx3.2.2.1/wx-dynamic-build/lib/wx/include/gtk3-unicode-3.2"
+                "/usr/wx3.2.2.1/wx-dynamic-build/lib/wx/include/gtk3-unicode-3.2",
+                "${workspaceFolder}/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",
