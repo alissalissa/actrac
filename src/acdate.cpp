@@ -88,7 +88,7 @@ bool date::operator==(date &haystack){
 	return false;
 }
 
-date &date::operator=(date &haystack){
+date date::operator=(date haystack){
 	day=haystack.Day();
 	month=haystack.Month();
 	year=haystack.Year();
@@ -97,18 +97,29 @@ date &date::operator=(date &haystack){
 
 /************************END OPERATORS****************/
 
+//TODO update activity management to include the use of IDs
 //Container Management
 void date::AddActivity(Activity a){
 	activities.push_back(a);
 }
 
 void date::AddActivity(std::string l,std::string *t,float h,bool c,int r,int rf){
-	Activity ac(l,t,h,c,r,rf);
+	Activity ac(gen_ac_id(activities,l),l,t,h,c,r,rf);
 	activities.push_back(ac);
 }
 
-void date::RemoveActivity(std::string lab){
-	
+void date::RemoveActivity(ActivityID idtr){
+	if(activities.size()==1){
+		if(activities[0].ID()==idtr)
+			activities.erase(activities.begin());
+	}else if(activities.size()>1){
+		for(std::vector<Activity>::iterator it=activities.begin();it!=activities.end();it++){
+			if((*it).ID()==idtr){
+				activities.erase(it);
+				break;
+			}
+		}
+	}
 }
 
 //Utilities
@@ -121,4 +132,14 @@ std::vector<std::string> date::split(std::string h,std::string delimiter){
 	}
 	ret.push_back(haystack);
 	return ret;
+}
+
+ActivityID gen_ac_id(std::vector<Activity> existing,std::string new_label){
+	int max=0;
+	for_each(existing.begin(),existing.end(),[&](Activity ac){
+		if(ac.Label()==new_label)
+			max=(ac.ID().Index()>max)?ac.ID().Index():max;
+	});
+	ActivityID id(max+1,new_label);
+	return id;
 }

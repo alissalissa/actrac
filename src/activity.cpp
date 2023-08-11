@@ -1,7 +1,8 @@
 #include "activity.h"
 
 //Constructors
-Activity::Activity(std::string l,std::string *t,float h,bool c,int r,int rf){
+Activity::Activity(ActivityID i,std::string l,std::string *t,float h,bool c,int r,int rf){
+	id=i;
 	label=l;
 	if(t){
 		int i=0;
@@ -26,6 +27,7 @@ Activity::Activity(const Activity &haystack){
 /******************END CONSTRUCTORS*******************/
 
 //Accessors and get/set
+ActivityID &Activity::ID(void){return id;}
 std::string &Activity::Label(void){return label;}
 std::vector<std::string> &Activity::Tags(void){return tags;}
 float &Activity::Hours(void){return hours;}
@@ -61,9 +63,10 @@ std::vector <Activity> Activity::propogate(void){
 		for(int i=1;i<=recurrences;i++){
 			std::string *t=static_cast<std::string*>(calloc(tags.size()+1,sizeof(std::string)));
 			t[tags.size()]="\0";
-			for(int i=0;i<tags.size();i++)
-				t[i]=tags[i];
-			Activity ac(label,t,hours,false,recurrences-i,recurrence_frq);
+			for(int j=0;j<tags.size();j++)
+				t[j]=tags[j];
+			ActivityID nid(id.Index()+i,id.Label());
+			Activity ac(nid,label,t,hours,false,recurrences-i,recurrence_frq);
 			free(t);
 			ret.push_back(ac);
 		}
@@ -72,7 +75,7 @@ std::vector <Activity> Activity::propogate(void){
 }
 
 //Operators
-Activity &Activity::operator=(Activity &haystack){
+Activity Activity::operator=(Activity haystack){
 	label=haystack.Label();
 	tags=haystack.Tags();
 	hours=haystack.Hours();

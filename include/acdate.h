@@ -1,9 +1,10 @@
-//Slimmed down date class compatible with the enums in wxDateTime
+//date class compatible with the enums in wxDateTime
 //	Tracks activities for a given date
 
 #ifndef __ACTRAC_ACDATE_H__
 #define __ACTRAC_ACDATE_H__
 
+#include <algorithm>
 #include <cstdarg>
 #include <sstream>
 #include <string>
@@ -12,6 +13,7 @@
 #include <wx/datetime.h>
 
 #include "activity.h"
+#include "idgen.h"
 
 typedef enum Month{
 	JAN=1,
@@ -57,11 +59,13 @@ public:
 	//Container management
 	void AddActivity(Activity);
 	void AddActivity(std::string,std::string *t=NULL,float=1,bool=true,int=0,int=-1);
-	void RemoveActivity(std::string);
+	void RemoveActivity(ActivityID);
 
 	//operators
 	bool operator==(date&);
-	date &operator=(date&);
+	date operator=(date);
 };
+
+ActivityID gen_ac_id(std::vector<Activity>,std::string);
 
 #endif

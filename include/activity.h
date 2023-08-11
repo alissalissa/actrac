@@ -30,11 +30,13 @@ public:
 	//Constructors/destructor
 	Activity(void)=default;
 	//Use a NULL terminator string
-	Activity(std::string,std::string *t=NULL,float=1,bool=true,int=0,int=-1);
+	//TODO update to use IDs
+	Activity(ActivityID,std::string="",std::string *t=NULL,float=1,bool=true,int=0,int=-1);
 	Activity(const Activity&);
 	~Activity(void)=default;
 
 	//Accessors and get/set
+	ActivityID &ID(void);
 	std::string &Label(void);
 	std::vector<std::string> &Tags(void);
 	float &Hours(void);
@@ -49,7 +51,7 @@ public:
 	std::vector <Activity> propogate(void);
 
 	//operators
-	Activity &operator=(Activity&);
+	Activity operator=(Activity);
 	bool operator==(Activity&);
 
 };

@@ -29,7 +29,7 @@ public:
 	std::string str(void);
 
 	//operators
-	ActivityID &operator=(ActivityID&);
+	ActivityID operator=(ActivityID);
 	bool operator==(ActivityID);
 	bool operator<(ActivityID);
 	bool operator<=(ActivityID);

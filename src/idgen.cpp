@@ -22,7 +22,7 @@ std::string ActivityID::str(void){
 }
 
 //Operators
-ActivityID &ActivityID::operator=(ActivityID &haystack){
+ActivityID ActivityID::operator=(ActivityID haystack){
 	index=haystack.Index();
 	label=haystack.Label();
 	return haystack;
