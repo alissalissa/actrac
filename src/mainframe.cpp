@@ -100,6 +100,7 @@ void MainFrame::OnQuit(wxCommandEvent &evt){
 	wxExit();
 }
 
+//TODO flesh out the backend of this
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	AddEventDialog *diag=new AddEventDialog(this);
 	diag->ShowModal();

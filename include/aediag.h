@@ -26,8 +26,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class AddEventDialog
 ///////////////////////////////////////////////////////////////////////////////
-//TODO flesh out events
-//TODO integrate into the mainframe classs
+//TODO How do we edit tags?
 class AddEventDialog : public wxDialog{
 private:
 
@@ -41,7 +40,6 @@ private:
 	wxButton* cancel_btn;
 
 	// Virtual event handlers, override them in your derived class
-	virtual void ValidateHourEntry( wxCommandEvent& event ) { event.Skip(); }
 	virtual void OnOK( wxCommandEvent& event );
     virtual void OnCancel( wxCommandEvent& event );
 
