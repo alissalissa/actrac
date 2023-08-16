@@ -30,7 +30,6 @@ public:
 	//Constructors/destructor
 	Activity(void)=default;
 	//Use a NULL terminator string
-	//TODO update to use IDs
 	Activity(ActivityID,std::string="",std::string *t=NULL,float=1,bool=true,int=0,int=-1);
 	Activity(const Activity&);
 	~Activity(void)=default;

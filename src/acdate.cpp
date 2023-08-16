@@ -97,7 +97,6 @@ date date::operator=(date haystack){
 
 /************************END OPERATORS****************/
 
-//TODO update activity management to include the use of IDs
 //Container Management
 void date::AddActivity(Activity a){
 	activities.push_back(a);

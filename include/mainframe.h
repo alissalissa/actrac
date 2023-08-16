@@ -24,12 +24,15 @@
 
 #include <wx/wx.h>
 
+#include "aediag.h"
+
 ///////////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class MainFrame
 ///////////////////////////////////////////////////////////////////////////////
+//TODO Add event to create a new activity
 class MainFrame : public wxFrame {
 private:
 	wxDataViewCtrl* otd_activities;
@@ -37,7 +40,8 @@ private:
 	wxDataViewColumn* activity_time;
 	wxNotebook* view_selector;
 	wxPanel* tracker_panel;
-	wxToggleButton* add_event;
+	//FIXME convert this to a normal wxButton (alread done in the RAD)
+	wxButton* add_evt_btn;
 	wxButton* delete_event_btn;
 	wxButton* edit_event_btn;
 	wxCalendarCtrl* m_calendar1;
@@ -47,12 +51,13 @@ private:
 	// Virtual event handlers, override them in your derived class
 	//virtual void OnEditEvent( wxCommandEvent& event ) { event.Skip(); }
 	virtual void OnQuit( wxCommandEvent& );
+	virtual void OnAddEvent(wxCommandEvent&);
 
 public:
 
 	MainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1000,700 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL|wxVSCROLL );
 
-	virtual ~MainFrame()=default;
+	virtual ~MainFrame();
 
 };
 
