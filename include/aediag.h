@@ -34,7 +34,7 @@ private:
 	wxStaticText* m_staticText2;
 	wxTextCtrl* ac_label_entry;
 	wxStaticText* m_staticText21;
-	wxSpinCtrl* hour_entry;
+	wxSpinCtrlDouble* hour_entry;
 	wxStaticText* m_staticText3;
 	wxListBox* tag_entry;
 	wxButton* ok_btn;

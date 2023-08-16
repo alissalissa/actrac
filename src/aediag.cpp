@@ -22,8 +22,9 @@ AddEventDialog::AddEventDialog( wxWindow* parent, wxWindowID id, const wxString&
 	m_staticText21->Wrap( -1 );
 	fgSizer1->Add( m_staticText21, 0, wxALL, 5 );
 
-	hour_entry = new wxSpinCtrl( this, wxID_ANY, wxT("0"), wxDefaultPosition, wxSize( 300,-1 ), wxSP_ARROW_KEYS, 0, 24, 0 );
-	fgSizer1->Add(hour_entry, 0, wxALL, 5 );
+	hour_entry = new wxSpinCtrlDouble( this, wxID_ANY, wxT("0"), wxDefaultPosition, wxSize( 300,-1 ), wxSP_ARROW_KEYS, 0, 24, 0.000000, 0.25 );
+	hour_entry->SetDigits( 2 );
+	fgSizer1->Add( hour_entry, 0, wxALL, 5 );
 
 	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("Tags"), wxDefaultPosition, wxSize( 125,-1 ), 0 );
 	m_staticText3->Wrap( -1 );

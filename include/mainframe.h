@@ -40,7 +40,6 @@ private:
 	wxDataViewColumn* activity_time;
 	wxNotebook* view_selector;
 	wxPanel* tracker_panel;
-	//FIXME convert this to a normal wxButton (alread done in the RAD)
 	wxButton* add_evt_btn;
 	wxButton* delete_event_btn;
 	wxButton* edit_event_btn;
