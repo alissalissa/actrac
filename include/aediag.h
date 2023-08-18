@@ -1,6 +1,8 @@
 //Diaog to add an event to a date
 #pragma once
 
+//#include <iostream>
+
 #include <wx/artprov.h>
 #include <wx/event.h>
 #include <wx/xrc/xmlres.h>
@@ -19,6 +21,9 @@
 #include <wx/sizer.h>
 #include <wx/dialog.h>
 #include <wx/spinctrl.h>
+#include <wx/menu.h>
+
+#include "addtag.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -36,10 +41,13 @@ private:
 	wxSpinCtrlDouble* hour_entry;
 	wxStaticText* m_staticText3;
 	wxListBox* tag_entry;
+	wxMenu* tag_entry_context_menu;
 	wxButton* ok_btn;
 	wxButton* cancel_btn;
 
 	// Virtual event handlers, override them in your derived class
+	virtual void OnAddTag( wxCommandEvent& event ) { event.Skip(); }
+	virtual void OnContextClick(wxContextMenuEvent &event);
 	virtual void OnOK( wxCommandEvent& event );
     virtual void OnCancel( wxCommandEvent& event );
 

@@ -31,6 +31,12 @@ AddEventDialog::AddEventDialog( wxWindow* parent, wxWindowID id, const wxString&
 	fgSizer1->Add( m_staticText3, 0, wxALL, 5 );
 
 	tag_entry = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxSize( 300,200 ), 0, NULL, 0 );
+	
+	tag_entry_context_menu = new wxMenu();
+	wxMenuItem* add_tag;
+	add_tag = new wxMenuItem( tag_entry_context_menu, wxID_ANY, wxString( wxT("Add Tag") ) , wxT("Add a new tag to the list"), wxITEM_NORMAL );
+	tag_entry_context_menu->Append( add_tag );
+	tag_entry->Connect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
 	fgSizer1->Add( tag_entry, 0, wxALL, 5 );
 
 	wxBoxSizer* bSizer7;
@@ -54,7 +60,6 @@ AddEventDialog::AddEventDialog( wxWindow* parent, wxWindowID id, const wxString&
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	hour_entry->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( AddEventDialog::ValidateHourEntry ), NULL, this );
 	ok_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnOK ), NULL, this );
 	cancel_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
 }
@@ -62,7 +67,6 @@ AddEventDialog::AddEventDialog( wxWindow* parent, wxWindowID id, const wxString&
 AddEventDialog::~AddEventDialog()
 {
 	// Disconnect Events
-	hour_entry->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( AddEventDialog::ValidateHourEntry ), NULL, this );
 	ok_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnOK ), NULL, this );
 	cancel_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
 
@@ -75,4 +79,10 @@ void AddEventDialog::OnOK(wxCommandEvent &event){
 
 void AddEventDialog::OnCancel(wxCommandEvent &event){
     this->EndModal(wxCANCEL);
+}
+
+void AddEventDialog::OnContextClick(wxContextMenuEvent &event){
+	PopupMenu(tag_entry_context_menu);
+	//std::cout<<"X="<<event.GetPosition().x<<std::endl;
+	//std::cout<<"Y="<<event.GetPosition().y<<std::endl;
 }
