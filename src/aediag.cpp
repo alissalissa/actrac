@@ -92,5 +92,11 @@ void AddEventDialog::OnContextClick(wxContextMenuEvent &event){
 //TODO add code to handle a successful exit, ie adding the selected tag
 void AddEventDialog::OnAddTag( wxCommandEvent& event ){
 	AddTagDialog *diag=new AddTagDialog(this);
-	int status=diag->ShowModal();
+	if(diag->ShowModal()==wxOK){
+		wxString temp_tag=diag->get_tag();
+		std::cout<<"tag="<<temp_tag.ToStdString()<<std::endl;
+		tag_entry->InsertItems(1,&temp_tag,0);
+		tag_entry->Refresh();
+		this->Refresh();
+	}
 }

@@ -26,7 +26,7 @@
 class AddTagDialog : public wxDialog {
 private:
 
-	wxComboBox* m_comboBox2;
+	wxComboBox* tag_entry;
 	wxButton* ok_btn;
 	wxButton* m_button9;
 
@@ -38,5 +38,9 @@ public:
 
 	AddTagDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add Tag"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,125 ), long style = wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP );
 	~AddTagDialog();
+
+	//Accessors
+	//FIXME this should behave differently if a tag is selected versus entered
+	wxString get_tag(void){return tag_entry->GetValue();}
 
 };

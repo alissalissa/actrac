@@ -10,10 +10,10 @@ AddTagDialog::AddTagDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
-	m_comboBox2 = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_comboBox2->SetMinSize( wxSize( 300,-1 ) );
+	tag_entry = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	tag_entry->SetMinSize( wxSize( 300,-1 ) );
 
-	bSizer7->Add( m_comboBox2, 0, wxALL, 5 );
+	bSizer7->Add(tag_entry, 0, wxALL, 5 );
 
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );

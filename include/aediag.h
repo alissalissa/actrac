@@ -1,7 +1,7 @@
 //Diaog to add an event to a date
 #pragma once
 
-//#include <iostream>
+#include <iostream>
 
 #include <wx/artprov.h>
 #include <wx/event.h>
