@@ -31,8 +31,8 @@ private:
 	wxButton* m_button9;
 
 	// Virtual event handlers, override them in your derived class
-	virtual void OnOK( wxCommandEvent& event ) { event.Skip(); }
-	virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
+	virtual void OnOK( wxCommandEvent& event );
+	virtual void OnCancel( wxCommandEvent& event );
 
 public:
 

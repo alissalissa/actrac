@@ -2,6 +2,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+//FIXME Refactor to accept some data structure containing a list of tags
 AddTagDialog::AddTagDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
@@ -45,4 +46,13 @@ AddTagDialog::~AddTagDialog()
 	ok_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddTagDialog::OnOK ), NULL, this );
 	m_button9->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddTagDialog::OnCancel ), NULL, this );
 
+}
+
+//Events
+void AddTagDialog::OnOK(wxCommandEvent &event){
+	this->EndModal(wxOK);
+}
+
+void AddTagDialog::OnCancel(wxCommandEvent &event){
+	this->EndModal(wxCANCEL);
 }

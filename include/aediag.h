@@ -46,7 +46,7 @@ private:
 	wxButton* cancel_btn;
 
 	// Virtual event handlers, override them in your derived class
-	virtual void OnAddTag( wxCommandEvent& event ) { event.Skip(); }
+	virtual void OnAddTag( wxCommandEvent& event );
 	virtual void OnContextClick(wxContextMenuEvent &event);
 	virtual void OnOK( wxCommandEvent& event );
     virtual void OnCancel( wxCommandEvent& event );

@@ -39,6 +39,8 @@ AddEventDialog::AddEventDialog( wxWindow* parent, wxWindowID id, const wxString&
 	tag_entry->Connect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
 	fgSizer1->Add( tag_entry, 0, wxALL, 5 );
 
+	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(AddEventDialog::OnAddTag), this, add_tag->GetId());
+
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 
@@ -85,4 +87,10 @@ void AddEventDialog::OnContextClick(wxContextMenuEvent &event){
 	PopupMenu(tag_entry_context_menu);
 	//std::cout<<"X="<<event.GetPosition().x<<std::endl;
 	//std::cout<<"Y="<<event.GetPosition().y<<std::endl;
+}
+
+//TODO add code to handle a successful exit, ie adding the selected tag
+void AddEventDialog::OnAddTag( wxCommandEvent& event ){
+	AddTagDialog *diag=new AddTagDialog(this);
+	int status=diag->ShowModal();
 }

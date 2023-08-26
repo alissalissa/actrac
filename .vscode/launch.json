@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/alissa/Documents/development/actrac/src",
-      "program": "/home/alissa/Documents/development/actrac/src/build/Debug/outDebug",
+      "cwd": "/home/alissa/Documents/development/actrac/bin",
+      "program": "/home/alissa/Documents/development/actrac/bin/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
