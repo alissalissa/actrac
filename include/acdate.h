@@ -64,6 +64,8 @@ public:
 	//operators
 	bool operator==(date&);
 	date operator=(date);
+	bool operator<(date);
+	
 };
 
 ActivityID gen_ac_id(std::vector<Activity>,std::string);

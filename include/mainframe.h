@@ -6,6 +6,7 @@
 
 #include <wx/string.h>
 #include <wx/dataview.h>
+#include <wx/date.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
@@ -25,6 +26,9 @@
 #include <wx/wx.h>
 
 #include "aediag.h"
+#include "acdate.h"
+#include "activity.h"
+#include "idgen.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -51,6 +55,17 @@ private:
 	virtual void OnQuit( wxCommandEvent& );
 	virtual void OnAddEvent(wxCommandEvent&);
 
+	//Intternal model
+	std::vector <date> utilized_dates;
+	std::vector <std::string> tags_cache;
+
+	//TODO build these out
+	void add_to_tags_cache(std::string);
+	void add_date(wxDateTime);
+	void date_exists(wxDateTime);
+	void add_activity(Activity);
+	void remove_activity(ActivityID);
+
 public:
 
 	MainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1000,700 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL|wxVSCROLL );
@@ -58,5 +73,7 @@ public:
 	virtual ~MainFrame();
 
 };
+
+int binary_search(std::vector<std::string>,string);
 
 #endif

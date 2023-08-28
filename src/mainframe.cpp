@@ -95,6 +95,22 @@ MainFrame::~MainFrame()
 
 }
 
+//Internal Model
+//Binary search and insert
+void MainFrame::add_to_tags_cache(std::string new_entry){
+	if(tags_cache.size()==0){
+		tags_cache.push_back(new_entry);
+		return;
+	}else if(tags_cache.size()==1){
+		if(new_entry<tags[0]) tags_cache.insert(tags_cache.begin(),new_entry);
+		else tags_cache.push_back(new_entry);
+		return;
+	}else{
+		//TODO flesh this out
+		
+	}
+}
+
 //Events
 void MainFrame::OnQuit(wxCommandEvent &evt){
 	wxExit();
@@ -104,4 +120,25 @@ void MainFrame::OnQuit(wxCommandEvent &evt){
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	AddEventDialog *diag=new AddEventDialog(this);
 	diag->ShowModal();
+}
+
+int binary_search(std::vector<std::string> haystack,std::string delimiter){
+	if(haystack.size()==0)
+		return 0;
+	if(haystack.size()==1)
+		return delimiter<haystack[0]?0:1;
+	//FIXME there's a way to make these conditionals more optimized by combining like operations and changing some variable scopes
+	//FIXME what if the next index and current index are only 1 apart?
+	if(delimiter<haystack[haystack.size()/2]){
+		std::vector<std::string> next_haystack;
+		for(int i=0;i<(haystack.size()/2);i++)
+			next_haystack.push_back(haystack[i]);
+		return binary_search(next_haystack,delimiter);
+	}else if(haystack[haystack.size()/2]<delimiter){
+		std::vector<std::string> next_haystack;
+		for(int i=(haystack.size()/2);i<haystack.size();i++)
+			next_haystack.push_back(haystack[i]);
+		return binary_search(next_haystack,delimiter)+next_haystack.size();
+	}
+	return haystack.size()/2;
 }

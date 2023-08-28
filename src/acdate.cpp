@@ -95,6 +95,13 @@ date date::operator=(date haystack){
 	return haystack;
 }
 
+bool date::operator<(date haystack){
+	if(year<haystack.Year()) return true;
+	if(month>=1 && month<haystack.Month()) return true;
+	if(day<haystack.Day()) return true;
+	return false;
+}
+
 /************************END OPERATORS****************/
 
 //Container Management
