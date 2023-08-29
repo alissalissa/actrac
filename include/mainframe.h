@@ -74,6 +74,6 @@ public:
 
 };
 
-int binary_search(std::vector<std::string>,std::string);
+template <class T> int binary_search(std::vector<T>,T);
 
 #endif

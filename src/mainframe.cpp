@@ -107,13 +107,15 @@ void MainFrame::add_to_tags_cache(std::string new_entry){
 		return;
 	}else{
 		//TODO flesh this out
-		int insertion_point=binary_search(tags_cache,new_entry);
+		int insertion_point=binary_search<std::string>(tags_cache,new_entry);
 		std::vector<std::string>::iterator insert_it=tags_cache.begin();
 		for(int i=1;i<=insertion_point;i++) ++insert_it;
 		tags_cache.insert(insert_it,new_entry);
 	}
 	return;
 }
+
+
 
 //Events
 void MainFrame::OnQuit(wxCommandEvent &evt){
@@ -126,22 +128,22 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	diag->ShowModal();
 }
 
-int binary_search(std::vector<std::string> haystack,std::string delimiter){
+template <class T> int binary_search(std::vector<T> haystack,T delimiter){
 	if(haystack.size()==0)
 		return 0;
 	if(haystack.size()==1)
 		return delimiter<haystack[0]?0:1;
 	//haystack size>=2
 	if(delimiter<haystack[haystack.size()/2]){
-		std::vector<std::string> next_haystack;
+		std::vector<T> next_haystack;
 		for(int i=0;i<(haystack.size()/2);i++)
 			next_haystack.push_back(haystack[i]);
-		return binary_search(next_haystack,delimiter);
+		return binary_search<T>(next_haystack,delimiter);
 	}else if(haystack[haystack.size()/2]<delimiter){
-		std::vector<std::string> next_haystack;
+		std::vector<T> next_haystack;
 		for(int i=(haystack.size()/2);i<haystack.size();i++)
 			next_haystack.push_back(haystack[i]);
-		return binary_search(next_haystack,delimiter)+next_haystack.size();
+		return binary_search<T>(next_haystack,delimiter)+next_haystack.size();
 	}
 	return haystack.size()/2;
 }
