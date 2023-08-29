@@ -102,13 +102,17 @@ void MainFrame::add_to_tags_cache(std::string new_entry){
 		tags_cache.push_back(new_entry);
 		return;
 	}else if(tags_cache.size()==1){
-		if(new_entry<tags[0]) tags_cache.insert(tags_cache.begin(),new_entry);
+		if(new_entry<tags_cache[0]) tags_cache.insert(tags_cache.begin(),new_entry);
 		else tags_cache.push_back(new_entry);
 		return;
 	}else{
 		//TODO flesh this out
-		
+		int insertion_point=binary_search(tags_cache,new_entry);
+		std::vector<std::string>::iterator insert_it=tags_cache.begin();
+		for(int i=1;i<=insertion_point;i++) ++insert_it;
+		tags_cache.insert(insert_it,new_entry);
 	}
+	return;
 }
 
 //Events
@@ -127,8 +131,7 @@ int binary_search(std::vector<std::string> haystack,std::string delimiter){
 		return 0;
 	if(haystack.size()==1)
 		return delimiter<haystack[0]?0:1;
-	//FIXME there's a way to make these conditionals more optimized by combining like operations and changing some variable scopes
-	//FIXME what if the next index and current index are only 1 apart?
+	//haystack size>=2
 	if(delimiter<haystack[haystack.size()/2]){
 		std::vector<std::string> next_haystack;
 		for(int i=0;i<(haystack.size()/2);i++)

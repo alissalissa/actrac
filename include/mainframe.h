@@ -6,7 +6,7 @@
 
 #include <wx/string.h>
 #include <wx/dataview.h>
-#include <wx/date.h>
+#include <wx/datetime.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
@@ -74,6 +74,6 @@ public:
 
 };
 
-int binary_search(std::vector<std::string>,string);
+int binary_search(std::vector<std::string>,std::string);
 
 #endif
