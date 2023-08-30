@@ -115,7 +115,29 @@ void MainFrame::add_to_tags_cache(std::string new_entry){
 	return;
 }
 
+void MainFrame::add_date(wxDateTime haystack){
+	//Does this date already exist in the list?
+	if(date_exists(haystack))
+		return;
+	//Not already in the list
+	date to_add(haystack);
+	int insert_index=binary_search<date>(utilized_dates,to_add);
+	if(insert_index==0)
+		utilized_dates.insert(utilized_dates.begin(),to_add);
+	else{
+		std::vector<date>::iterator insert_it=utilized_dates.begin();
+		for(int i=1;i<=insert_index;i++)
+			insert_it++;
+		utilized_dates.insert(insert_it,to_add);
+	}
+}
 
+bool MainFrame::date_exists(wxDateTime comparator){
+	int index=binary_search<date>(utilized_dates,create_date(comparator));
+	if(utilized_dates[index]==comparator)
+		return true;
+	return false;
+}
 
 //Events
 void MainFrame::OnQuit(wxCommandEvent &evt){

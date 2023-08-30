@@ -17,10 +17,10 @@ date::date(const wxDateTime &haystack){
 	year=haystack.GetYear();
 }
 
-date::date(date &haystack){
-	day=haystack.Day();
-	month=haystack.Month();
-	year=haystack.Year();
+date::date(const date &haystack){
+	day=haystack.day;
+	month=haystack.month;
+	year=haystack.year;
 }
 /*****************END CONSTRUCTOR****************/
 
@@ -82,10 +82,16 @@ std::string date::toStdStr(std::string format){
 
 //Operators
 //Comparator
-bool date::operator==(date &haystack){
+bool date::operator==(date haystack){
 	if(month==haystack.Month() && day==haystack.Day() && year==haystack.Year())
 		return true;
 	return false;
+}
+
+bool date::operator==(wxDateTime haystack){
+	if(year!=haystack.GetYear() || static_cast<int>(month)!=static_cast<int>(haystack.GetMonth()) || day!=haystack.GetDay())
+		return false;
+	return true;
 }
 
 date date::operator=(date haystack){
@@ -148,4 +154,9 @@ ActivityID gen_ac_id(std::vector<Activity> existing,std::string new_label){
 	});
 	ActivityID id(max+1,new_label);
 	return id;
+}
+
+date create_date(wxDateTime haystack){
+	date ret(haystack);
+	return ret;
 }

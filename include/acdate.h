@@ -47,7 +47,7 @@ public:
 	date(void)=default;
 	date(short,month_t,short);
 	date(const wxDateTime&);
-	date(date&);
+	date(const date&);
 	~date(void)=default;
 
 	//Accessors/converters
@@ -62,12 +62,14 @@ public:
 	void RemoveActivity(ActivityID);
 
 	//operators
-	bool operator==(date&);
+	bool operator==(date);
+	bool operator==(wxDateTime);
 	date operator=(date);
 	bool operator<(date);
 	
 };
 
 ActivityID gen_ac_id(std::vector<Activity>,std::string);
+date create_date(wxDateTime);
 
 #endif

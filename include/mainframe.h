@@ -62,7 +62,7 @@ private:
 	//TODO build these out
 	void add_to_tags_cache(std::string);
 	void add_date(wxDateTime);
-	void date_exists(wxDateTime);
+	bool date_exists(wxDateTime);
 	void add_activity(Activity);
 	void remove_activity(ActivityID);
 
