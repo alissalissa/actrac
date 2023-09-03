@@ -28,12 +28,14 @@ date::date(const date &haystack){
 short &date::Day(void){return day;}
 month_t &date::Month(void){return month;}
 short &date::Year(void){return year;}
+std::vector<Activity> &date::Activities(void){return activities;}
 
 std::string date::toStdStr(std::string format){
 	std::ostringstream output;
 	std::vector<std::string> components=split(format,"%");
-	if(components.size()!=3)
+	if(components.size()!=4)
 		throw -2;
+	components.erase(components.begin());
 	for(int i=0;i<3;i++){
 		switch(components[i][0]){
 			case 'm':
@@ -86,6 +88,10 @@ bool date::operator==(date haystack){
 	if(month==haystack.Month() && day==haystack.Day() && year==haystack.Year())
 		return true;
 	return false;
+}
+
+bool date::operator!=(date haystack){
+	return (this->operator==(haystack))?false:true;
 }
 
 bool date::operator==(wxDateTime haystack){

@@ -45,7 +45,6 @@ AddTagDialog::~AddTagDialog()
 	// Disconnect Events
 	ok_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddTagDialog::OnOK ), NULL, this );
 	m_button9->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddTagDialog::OnCancel ), NULL, this );
-
 }
 
 //Events

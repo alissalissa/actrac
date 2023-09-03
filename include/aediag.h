@@ -1,7 +1,9 @@
 //Diaog to add an event to a date
 #pragma once
 
+#include <cstdlib>
 #include <iostream>
+#include <string>
 
 #include <wx/artprov.h>
 #include <wx/event.h>
@@ -23,7 +25,9 @@
 #include <wx/spinctrl.h>
 #include <wx/menu.h>
 
+#include "activity.h"
 #include "addtag.h"
+#include "idgen.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -44,6 +48,7 @@ private:
 	wxMenu* tag_entry_context_menu;
 	wxButton* ok_btn;
 	wxButton* cancel_btn;
+	Activity *generated_activity;
 
 	// Virtual event handlers, override them in your derived class
 	virtual void OnAddTag( wxCommandEvent& event );
@@ -53,8 +58,13 @@ private:
 
 public:
 
-	AddEventDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add New Event"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,390 ), long style = wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP );
+	AddEventDialog(wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add New Event"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,390 ), long style = wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP );
 	~AddEventDialog();
+
+	//Accessors
+	//Accessors
+	Activity get_generated_activity(ActivityID);
+	std::string get_activity_label(void){return ac_label_entry->GetValue().ToStdString();}
 
 };
 

@@ -122,6 +122,7 @@ void MainFrame::add_date(wxDateTime haystack){
 	//Not already in the list
 	date to_add(haystack);
 	int insert_index=binary_search<date>(utilized_dates,to_add);
+	//FIXME this conditional can be optimized out
 	if(insert_index==0)
 		utilized_dates.insert(utilized_dates.begin(),to_add);
 	else{
@@ -147,7 +148,32 @@ void MainFrame::OnQuit(wxCommandEvent &evt){
 //TODO flesh out the backend of this
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	AddEventDialog *diag=new AddEventDialog(this);
-	diag->ShowModal();
+	if(diag->ShowModal()==wxOK){
+		wxDateTime cd=m_calendar1->GetDate();
+		int index=binary_search<date>(utilized_dates,create_date(cd));
+		if(utilized_dates.size()==0){
+			date d(cd);
+			std::vector<date>::iterator it=utilized_dates.begin();
+			//FIXME this conditional block can be optimized better by switching order
+			utilized_dates.insert(it,d);
+		}else if(utilized_dates[index]!=create_date(cd)){
+			date d(cd);
+			std::vector<date>::iterator it=utilized_dates.begin();
+			//FIXME this conditional block can be optimized better by switching order
+			if(index==0)
+				utilized_dates.insert(it,d);
+			else{
+				for(int i=1;i<=index;i++)
+					it++;
+				utilized_dates.insert(it,d);
+			}
+		}
+
+		ActivityID id_to_add=gen_ac_id(utilized_dates[index].Activities(),diag->get_activity_label());
+		Activity ac_to_add(diag->get_generated_activity(id_to_add));
+		//FIXME insert the code to add the new tags to the cache
+		utilized_dates[index].AddActivity(ac_to_add);
+	}
 }
 
 template <class T> int binary_search(std::vector<T> haystack,T delimiter){

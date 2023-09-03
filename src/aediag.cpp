@@ -2,7 +2,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-AddEventDialog::AddEventDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+AddEventDialog::AddEventDialog(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -66,17 +66,17 @@ AddEventDialog::AddEventDialog( wxWindow* parent, wxWindowID id, const wxString&
 	cancel_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
 }
 
-AddEventDialog::~AddEventDialog()
-{
+AddEventDialog::~AddEventDialog(void){
 	// Disconnect Events
 	ok_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnOK ), NULL, this );
 	cancel_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
-
+	if(generated_activity)
+		delete generated_activity;
 }
 
 //Event management
 void AddEventDialog::OnOK(wxCommandEvent &event){
-    this->EndModal(wxOK);
+	this->EndModal(wxOK);
 }
 
 void AddEventDialog::OnCancel(wxCommandEvent &event){
@@ -99,4 +99,11 @@ void AddEventDialog::OnAddTag( wxCommandEvent& event ){
 		tag_entry->Refresh();
 		this->Refresh();
 	}
+}
+
+//Accessors
+Activity AddEventDialog::get_generated_activity(ActivityID id_to_add){
+	//FIXME add in code to fetch the tags
+	Activity ac(id_to_add,get_activity_label(),NULL,static_cast<float>(hour_entry->GetValue()),true,0,-1);
+	return ac;
 }

@@ -55,6 +55,7 @@ public:
 	month_t &Month(void);
 	short &Year(void);
 	std::string toStdStr(std::string="%mm%dd%yy");
+	std::vector<Activity> &Activities(void);
 
 	//Container management
 	void AddActivity(Activity);
@@ -63,6 +64,7 @@ public:
 
 	//operators
 	bool operator==(date);
+	bool operator!=(date);
 	bool operator==(wxDateTime);
 	date operator=(date);
 	bool operator<(date);

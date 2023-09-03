@@ -54,6 +54,7 @@ private:
 	//virtual void OnEditEvent( wxCommandEvent& event ) { event.Skip(); }
 	virtual void OnQuit( wxCommandEvent& );
 	virtual void OnAddEvent(wxCommandEvent&);
+	virtual void OnRemoveEvent(wxCommandEvent &evt){evt.Skip();}
 
 	//Intternal model
 	std::vector <date> utilized_dates;
@@ -63,8 +64,6 @@ private:
 	void add_to_tags_cache(std::string);
 	void add_date(wxDateTime);
 	bool date_exists(wxDateTime);
-	void add_activity(Activity);
-	void remove_activity(ActivityID);
 
 public:
 
