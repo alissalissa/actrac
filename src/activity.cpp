@@ -6,8 +6,10 @@ Activity::Activity(ActivityID i,std::string l,std::string *t,float h,bool c,int 
 	label=l;
 	if(t){
 		int i=0;
-		while(t[i]!="\0")
+		while(t[i][0]!='\0'){
 			tags.push_back(t[i]);
+			i++;
+		}
 	}
 	hours=h;
 	confirmed=c;
