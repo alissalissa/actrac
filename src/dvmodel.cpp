@@ -2,8 +2,6 @@
 #include "dvmodel.h"
 
 void DVModel::GetValueByRow(wxVariant &dest,unsigned int row,unsigned int col) const{
-	assert(row>=0);
-	assert(col>=0);
 	if(row>=data.size())
 		return;
 	if(col>=2)
