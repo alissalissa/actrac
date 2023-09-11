@@ -28,6 +28,7 @@
 #include "aediag.h"
 #include "acdate.h"
 #include "activity.h"
+#include "dvmodel.h"
 #include "idgen.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -46,7 +47,7 @@ private:
 	wxButton* add_evt_btn;
 	wxButton* delete_event_btn;
 	wxButton* edit_event_btn;
-	wxCalendarCtrl* m_calendar1;
+	wxCalendarCtrl* date_selector;
 	wxPanel* report_panel;
 	wxMenuBar* menu_bar;
 	wxMenu* file_menu;
@@ -56,9 +57,11 @@ private:
 	virtual void OnAddEvent(wxCommandEvent&);
 	virtual void OnRemoveEvent(wxCommandEvent &evt){evt.Skip();}
 
-	//Intternal model
+	//Intternal model/view
 	std::vector <date> utilized_dates;
 	std::vector <std::string> tags_cache;
+	DVModel model;
+	void update_view(void);
 
 	//TODO build these out
 	void add_to_tags_cache(std::string);

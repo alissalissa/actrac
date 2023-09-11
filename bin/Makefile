@@ -5,15 +5,15 @@ WX_LIBS=`/usr/wx3.2.2.1/wx-dynamic-build/wx-config --libs`
 
 default: main
 
-main: main.o mainframe.o acdate.o activity.o aediag.o addtag.o
+main: main.o mainframe.o acdate.o activity.o aediag.o addtag.o idgen.o dvmodel.o
 	$(INFO compiling.....)
-	g++ -g -o actrac $(WX_LIBS) main.o addtag.o aediag.o mainframe.o acdate.o activity.o idgen.o
+	g++ -g -o actrac $(WX_LIBS) main.o addtag.o aediag.o mainframe.o dvmodel.o acdate.o activity.o idgen.o
 
 main.o: mainframe.o
 	$(INFO compiling main.cpp)
 	g++ -g -c -o main.o $(WX_INCLUDE_PATH) -I../include ../src/main.cpp
 
-mainframe.o: acdate.o aediag.o
+mainframe.o: acdate.o aediag.o dvmodel.o
 	$(INFO compiling mainframe.cpp)
 	g++ -g -c -o mainframe.o $(WX_INCLUDE_PATH) -I../include ../src/mainframe.cpp
 
@@ -36,6 +36,10 @@ aediag.o: addtag.o
 addtag.o:
 	$(INFO compiling addtag.cpp)
 	g++ -g -c -o addtag.o $(WX_INCLUDE_PATH) -I../include ../src/addtag.cpp
+
+dvmodel.o:
+	$(INFO compiling dvmodel.cpp)
+	g++ -g -c -o dvmodel.o $(WX_INCLUDE_PATH) -I../include ../src/dvmodel.cpp
 
 clean:
 	rm *.o actrac

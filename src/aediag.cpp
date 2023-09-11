@@ -103,7 +103,13 @@ void AddEventDialog::OnAddTag( wxCommandEvent& event ){
 
 //Accessors
 Activity AddEventDialog::get_generated_activity(ActivityID id_to_add){
-	//FIXME add in code to fetch the tags
-	Activity ac(id_to_add,get_activity_label(),NULL,static_cast<float>(hour_entry->GetValue()),true,0,-1);
+	std::string *ts=NULL;
+	if(tag_entry->GetCount()>0){
+		ts=(std::string*)calloc(tag_entry->GetCount()+1,sizeof(std::string));
+		ts[tag_entry->GetCount()]="\0";
+		for(int i=0;i<tag_entry->GetCount();i++)
+			ts[i]=tag_entry->GetString(i).ToStdString();
+	}
+	Activity ac(id_to_add,get_activity_label(),ts,static_cast<float>(hour_entry->GetValue()),true,0,-1);
 	return ac;
 }

@@ -48,8 +48,8 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
 
-	m_calendar1 = new wxCalendarCtrl( tracker_panel, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxCAL_SHOW_HOLIDAYS );
-	bSizer5->Add( m_calendar1, 0, wxALL|wxALIGN_RIGHT, 5 );
+	date_selector = new wxCalendarCtrl( tracker_panel, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxCAL_SHOW_HOLIDAYS );
+	bSizer5->Add( date_selector, 0, wxALL|wxALIGN_RIGHT, 5 );
 
 
 	bSizer2->Add( bSizer5, 1, wxEXPAND, 5 );
@@ -145,11 +145,16 @@ void MainFrame::OnQuit(wxCommandEvent &evt){
 	wxExit();
 }
 
+//Internal model/view
+void MainFrame::update_view(void){
+	
+}
+
 //TODO flesh out the backend of this
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	AddEventDialog *diag=new AddEventDialog(this);
 	if(diag->ShowModal()==wxOK){
-		wxDateTime cd=m_calendar1->GetDate();
+		wxDateTime cd=date_selector->GetDate();
 		int index=binary_search<date>(utilized_dates,create_date(cd));
 		if(utilized_dates.size()==0){
 			date d(cd);
@@ -174,6 +179,7 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 		//FIXME insert the code to add the new tags to the cache
 		utilized_dates[index].AddActivity(ac_to_add);
 	}
+	//TODO update the display maybe?
 }
 
 template <class T> int binary_search(std::vector<T> haystack,T delimiter){
