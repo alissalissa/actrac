@@ -14,6 +14,13 @@ void DVModel::GetValueByRow(wxVariant &dest,unsigned int row,unsigned int col) c
 	return;
 }
 
-bool DVModel::SetValueByRow(const wxVariant &haystack,unsigned int one,unsigned int two){
+bool DVModel::SetValueByRow(const wxVariant &haystack,unsigned int row,unsigned int col){
+	if(row>=data.size() || col>1)
+		return false;
+	if(col==0){
+		data[row].first=haystack.GetString().ToStdString();
+		return true;
+	}
+	data[row].second=atof(haystack.GetString().ToStdString().c_str());
 	return true;
 }

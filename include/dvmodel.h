@@ -4,6 +4,7 @@
 #define __ACTRAC_DVM_H__
 
 #include <assert.h>
+#include <cstdlib>
 #include <sstream>
 #include <string>
 #include <vector>
