@@ -3,8 +3,10 @@
 #ifndef __ACTRAC_DVM_H__
 #define __ACTRAC_DVM_H__
 
+#include <algorithm>
 #include <assert.h>
 #include <cstdlib>
+#include <exception>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -12,6 +14,7 @@
 #include <wx/dataview.h>
 #include <wx/wx.h>
 
+//TODO update this to include capture of ActivityID data
 template <class T1,class T2> class DVPair {
 public:
 	T1 first;
@@ -49,9 +52,10 @@ public:
 	DVModel(void)=default;
 	~DVModel(void)=default;
 
-	//Accessors
-	virtual void GetValueByRow(wxVariant&,unsigned int,unsigned int) const wxOVERRIDE;
-	virtual bool SetValueByRow(const wxVariant&,unsigned int,unsigned int) wxOVERRIDE;
+	//Accessors / modifiers
+	void GetValueByRow(wxVariant&,unsigned int,unsigned int) const wxOVERRIDE;
+	bool SetValueByRow(const wxVariant&,unsigned int,unsigned int) wxOVERRIDE;
+	bool AddRow(const DVPair<std::string,float>*);
 
 };
 

@@ -22,5 +22,18 @@ bool DVModel::SetValueByRow(const wxVariant &haystack,unsigned int row,unsigned 
 		return true;
 	}
 	data[row].second=atof(haystack.GetString().ToStdString().c_str());
+	RowChanged(row);
+	return true;
+}
+
+bool DVModel::AddRow(const DVPair<std::string,float> *haystack){
+	try{
+		data.push_back(*haystack);
+		std::sort(data.begin(),data.end());
+		Reset(data.size());
+	}catch(std::exception e){
+		std::cout<<e.what()<<std::endl;
+		return false;
+	}
 	return true;
 }
