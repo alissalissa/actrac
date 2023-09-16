@@ -3,14 +3,20 @@
 ///////////////////////////////////////////////////////////////////////////
 
 //FIXME Refactor to accept some data structure containing a list of tags
-AddTagDialog::AddTagDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+AddTagDialog::AddTagDialog( wxWindow* parent, std::vector<std::string> tc,wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
+	cache=tc;
 	tag_entry = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	if(cache.size()>0)
+		for_each(cache.begin(),cache.end(),[&](std::string t){
+			wxString wt(t);
+			tag_entry->Append(wt);
+		});
 	tag_entry->SetMinSize( wxSize( 300,-1 ) );
 
 	bSizer7->Add(tag_entry, 0, wxALL, 5 );

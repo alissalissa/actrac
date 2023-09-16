@@ -152,7 +152,7 @@ void MainFrame::update_view(void){
 }
 
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
-	AddEventDialog *diag=new AddEventDialog(this);
+	AddEventDialog *diag=new AddEventDialog(this,tags_cache);
 	if(diag->ShowModal()==wxOK){
 		wxDateTime cd=date_selector->GetDate();
 		int index=binary_search<date>(utilized_dates,create_date(cd));

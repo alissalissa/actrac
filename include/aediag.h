@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include <wx/artprov.h>
 #include <wx/event.h>
@@ -50,6 +51,8 @@ private:
 	wxButton* cancel_btn;
 	Activity *generated_activity;
 
+	std::vector<std::string> cache;
+
 	// Virtual event handlers, override them in your derived class
 	virtual void OnAddTag( wxCommandEvent& event );
 	virtual void OnContextClick(wxContextMenuEvent &event);
@@ -58,7 +61,7 @@ private:
 
 public:
 
-	AddEventDialog(wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add New Event"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,390 ), long style = wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP );
+	AddEventDialog(wxWindow* parent, std::vector<std::string>, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add New Event"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,390 ), long style = wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP );
 	~AddEventDialog();
 
 	//Accessors

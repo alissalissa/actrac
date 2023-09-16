@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/string.h>
@@ -29,6 +32,7 @@ private:
 	wxComboBox* tag_entry;
 	wxButton* ok_btn;
 	wxButton* m_button9;
+	std::vector<std::string> cache;
 
 	// Virtual event handlers, override them in your derived class
 	virtual void OnOK( wxCommandEvent& event );
@@ -36,11 +40,10 @@ private:
 
 public:
 
-	AddTagDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add Tag"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,125 ), long style = wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP );
+	AddTagDialog( wxWindow* parent, std::vector<std::string>, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add Tag"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,125 ), long style = wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP );
 	~AddTagDialog();
 
 	//Accessors
-	//FIXME this should behave differently if a tag is selected versus entered
 	wxString get_tag(void){return tag_entry->GetValue();}
 
 };

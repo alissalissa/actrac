@@ -2,9 +2,10 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-AddEventDialog::AddEventDialog(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	cache=tc;
 
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 4, 2, 0, 0 );
@@ -90,7 +91,7 @@ void AddEventDialog::OnContextClick(wxContextMenuEvent &event){
 }
 
 void AddEventDialog::OnAddTag( wxCommandEvent& event ){
-	AddTagDialog *diag=new AddTagDialog(this);
+	AddTagDialog *diag=new AddTagDialog(this,cache);
 	if(diag->ShowModal()==wxOK){
 		wxString temp_tag=diag->get_tag();
 		//std::cout<<"tag="<<temp_tag.ToStdString()<<std::endl;
