@@ -30,7 +30,7 @@ public:
 	~DVPair(void)=default;
 	
 	//So it can be sorted
-	bool operator<(DVPair<T1,T2> haystack) const{
+	bool operator<(const DVPair<T1,T2> haystack) const{
 		if(this->first < haystack.first)
 			return true;
 		if(this->first > haystack.first)
@@ -38,6 +38,15 @@ public:
 		if(this->second<haystack.second)
 			return true;
 		return false;
+	}
+
+	//So it can be searched
+	bool operator==(const DVPair<T1,T2> haystack) const {
+		if(this->first!=haystack.first)
+			return false;
+		if(this->second!=haystack.second)
+			return false;
+		return true;
 	}
 
 };
@@ -52,6 +61,8 @@ public:
 	//Constructors/Destructors
 	DVModel(void)=default;
 	~DVModel(void)=default;
+
+	int search(const DVPair<std::string,float>) const;
 
 	//Accessors / modifiers
 	void GetValueByRow(wxVariant&,unsigned int,unsigned int) const wxOVERRIDE;
