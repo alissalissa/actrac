@@ -108,7 +108,6 @@ void MainFrame::add_to_tags_cache(std::string new_entry){
 		else tags_cache.push_back(new_entry);
 		return;
 	}else{
-		//TODO flesh this out
 		int insertion_point=binary_search<std::string>(tags_cache,new_entry);
 		std::vector<std::string>::iterator insert_it=tags_cache.begin();
 		for(int i=1;i<=insertion_point;i++) ++insert_it;
@@ -152,7 +151,6 @@ void MainFrame::update_view(void){
 	
 }
 
-//TODO flesh out the backend of this
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	AddEventDialog *diag=new AddEventDialog(this);
 	if(diag->ShowModal()==wxOK){
@@ -178,7 +176,9 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 
 		ActivityID id_to_add=gen_ac_id(utilized_dates[index].Activities(),diag->get_activity_label());
 		Activity ac_to_add(diag->get_generated_activity(id_to_add));
-		//FIXME insert the code to add the new tags to the cache
+		for_each(ac_to_add.Tags().begin(),ac_to_add.Tags().end(),[&](std::string t){
+			this->add_to_tags_cache(t);
+		});
 		
 		utilized_dates[index].AddActivity(ac_to_add);
 		DVPair <std::string,float> *to_add=new DVPair<std::string,float>(ac_to_add.Label(),ac_to_add.Hours());

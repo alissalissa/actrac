@@ -89,12 +89,11 @@ void AddEventDialog::OnContextClick(wxContextMenuEvent &event){
 	//std::cout<<"Y="<<event.GetPosition().y<<std::endl;
 }
 
-//TODO add code to handle a successful exit, ie adding the selected tag
 void AddEventDialog::OnAddTag( wxCommandEvent& event ){
 	AddTagDialog *diag=new AddTagDialog(this);
 	if(diag->ShowModal()==wxOK){
 		wxString temp_tag=diag->get_tag();
-		std::cout<<"tag="<<temp_tag.ToStdString()<<std::endl;
+		//std::cout<<"tag="<<temp_tag.ToStdString()<<std::endl;
 		tag_entry->InsertItems(1,&temp_tag,0);
 		tag_entry->Refresh();
 		this->Refresh();
@@ -103,13 +102,11 @@ void AddEventDialog::OnAddTag( wxCommandEvent& event ){
 
 //Accessors
 Activity AddEventDialog::get_generated_activity(ActivityID id_to_add){
-	std::string *ts=NULL;
-	if(tag_entry->GetCount()>0){
-		ts=(std::string*)calloc(tag_entry->GetCount()+1,sizeof(std::string));
-		ts[tag_entry->GetCount()]="\0";
+	std::vector<std::string> ts;
+	if(tag_entry->GetCount()>0)
 		for(int i=0;i<tag_entry->GetCount();i++)
-			ts[i]=tag_entry->GetString(i).ToStdString();
-	}
-	Activity ac(id_to_add,get_activity_label(),ts,static_cast<float>(hour_entry->GetValue()),true,0,-1);
+			ts.push_back(tag_entry->GetString(i).ToStdString());
+	ts.push_back("\0");
+	Activity ac(id_to_add,get_activity_label(),ts.data(),static_cast<float>(hour_entry->GetValue()),true,0,-1);
 	return ac;
 }

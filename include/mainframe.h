@@ -1,6 +1,10 @@
 #ifndef __ACTRAC_MAINFRAME_H__
 #define __ACTRAC_MAINFRAME_H__
 
+#include <algorithm>
+#include <string>
+#include <vector>
+
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 
@@ -39,6 +43,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 class MainFrame : public wxFrame {
 private:
+	//FIXME organize this a little better
 	wxDataViewCtrl* otd_activities;
 	wxDataViewColumn* activity_name;
 	wxDataViewColumn* activity_time;
