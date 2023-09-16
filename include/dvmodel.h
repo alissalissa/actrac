@@ -15,7 +15,6 @@
 #include <wx/dataview.h>
 #include <wx/wx.h>
 
-//TODO update this to include capture of ActivityID data
 template <class T1,class T2> class DVPair {
 public:
 	T1 first;
@@ -25,6 +24,12 @@ public:
 	DVPair(const DVPair<T1,T2> &haystack){
 		this->first=haystack.first;
 		this->second=haystack.second;
+	}
+	//Just a general purpose constructor set
+	DVPair(void)=default;
+	DVPair(T1 f,T2 s){
+		this->first=f;
+		this->second=s;
 	}
 
 	~DVPair(void)=default;

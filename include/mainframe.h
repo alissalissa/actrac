@@ -51,11 +51,13 @@ private:
 	wxPanel* report_panel;
 	wxMenuBar* menu_bar;
 	wxMenu* file_menu;
+	DVModel *activity_model;
+
 	// Virtual event handlers, override them in your derived class
 	//virtual void OnEditEvent( wxCommandEvent& event ) { event.Skip(); }
-	virtual void OnQuit( wxCommandEvent& );
-	virtual void OnAddEvent(wxCommandEvent&);
-	virtual void OnRemoveEvent(wxCommandEvent &evt){evt.Skip();}
+	void OnQuit( wxCommandEvent& );
+	void OnAddEvent(wxCommandEvent&);
+	void OnRemoveEvent(wxCommandEvent &evt){evt.Skip();}
 
 	//Intternal model/view
 	std::vector <date> utilized_dates;

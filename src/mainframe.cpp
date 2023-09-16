@@ -19,7 +19,9 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 
 	otd_activities = new wxDataViewCtrl( tracker_panel, wxID_ANY, wxDefaultPosition, wxSize( 700,500 ), 0 );
 	activity_name = otd_activities->AppendTextColumn( wxT("Activity"), 0, wxDATAVIEW_CELL_INERT, 400, static_cast<wxAlignment>(wxALIGN_LEFT), wxDATAVIEW_COL_RESIZABLE );
-	activity_time = otd_activities->AppendTextColumn( wxT("Hours"), 0, wxDATAVIEW_CELL_INERT, 300, static_cast<wxAlignment>(wxALIGN_LEFT), wxDATAVIEW_COL_RESIZABLE );
+	activity_time = otd_activities->AppendTextColumn( wxT("Hours"), 1, wxDATAVIEW_CELL_INERT, 300, static_cast<wxAlignment>(wxALIGN_LEFT), wxDATAVIEW_COL_RESIZABLE );
+	activity_model=new DVModel();
+	otd_activities->AssociateModel(activity_model);
 	bSizer4->Add( otd_activities, 0, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer41;
@@ -177,9 +179,12 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 		ActivityID id_to_add=gen_ac_id(utilized_dates[index].Activities(),diag->get_activity_label());
 		Activity ac_to_add(diag->get_generated_activity(id_to_add));
 		//FIXME insert the code to add the new tags to the cache
+		
 		utilized_dates[index].AddActivity(ac_to_add);
+		DVPair <std::string,float> *to_add=new DVPair<std::string,float>(ac_to_add.Label(),ac_to_add.Hours());
+		activity_model->AddRow(to_add);
+		delete to_add;
 	}
-	//TODO update the display maybe?
 }
 
 template <class T> int binary_search(std::vector<T> haystack,T delimiter){
