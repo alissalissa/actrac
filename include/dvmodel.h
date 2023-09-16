@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <cstdlib>
 #include <exception>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -56,6 +57,7 @@ public:
 	void GetValueByRow(wxVariant&,unsigned int,unsigned int) const wxOVERRIDE;
 	bool SetValueByRow(const wxVariant&,unsigned int,unsigned int) wxOVERRIDE;
 	bool AddRow(const DVPair<std::string,float>*);
+	bool DeleteRow(const unsigned int);
 
 };
 

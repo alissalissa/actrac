@@ -37,3 +37,21 @@ bool DVModel::AddRow(const DVPair<std::string,float> *haystack){
 	}
 	return true;
 }
+
+bool DVModel::DeleteRow(const unsigned int row){
+	try{
+		if(row==0){
+			data.erase(data.begin());
+		}else{
+			std::vector<DVPair<std::string,float> >::iterator it=data.begin();
+			for(int i=1;i<=row;i++)
+				++it;
+			data.erase(it);
+		}
+		RowDeleted(row);
+	}catch(std::exception e){
+		std::cout<<e.what()<<std::endl;
+		return false;
+	}
+	return true;
+}
