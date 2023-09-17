@@ -51,7 +51,8 @@ public:
 
 	//operators
 	Activity operator=(Activity);
-	bool operator==(Activity&);
+	bool operator==(Activity&) const;
+	bool operator!=(Activity&) const;
 
 };
 

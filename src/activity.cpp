@@ -87,7 +87,7 @@ Activity Activity::operator=(Activity haystack){
 	return haystack;
 }
 
-bool Activity::operator==(Activity &haystack){
+bool Activity::operator==(Activity &haystack) const {
 	if(haystack.Label()!=label)
 		return false;
 	if(haystack.Tags().size()!=tags.size())
@@ -104,6 +104,10 @@ bool Activity::operator==(Activity &haystack){
 	if(haystack.RecurrenceFrequency()!=recurrence_frq)
 		return false;
 	return true;
+}
+
+bool Activity::operator!=(Activity &haystack) const {
+	return !(this->operator==(haystack));
 }
 
 //Utilities

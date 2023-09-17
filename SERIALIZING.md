@@ -17,12 +17,13 @@ What follows is the length of the entire section in bytes.  The byte stream cons
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) Label<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c) The number of tags associated with this activity<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d) Each tag, separated by 0x0b<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e) The number of hours, stored in a 32-bit float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e) The number of hours as a string<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f) a single byte, 0x01 for confirmed activity, 0x00 for an unconfirmed activity<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g) an int32 indicating the number of recurrences<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h) an int32 indicating the number of days over which an activity should repeat<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i) Each activity is separated by an indicator (0x0c)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;2) Each date is separated by an indicator (0x0d)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g) an int32 stored as a string indicating the number of recurrences<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h) an int32 stored as a string indicating the number of days over which an activity should repeat<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i) Each activity field is separated by an indicator (0x0e)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2) Each activity is seperated by an indicator (0x0c)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;3) Each date is separated by an indicator (0x0d)<br>
 
 ## End
 The end of the file ends with the magic number to indicate proper tracking / lack of file corruption.

@@ -13,7 +13,7 @@ main.o: mainframe.o
 	$(INFO compiling main.cpp)
 	g++ -g -c -o main.o $(WX_INCLUDE_PATH) -I../include ../src/main.cpp
 
-mainframe.o: acdate.o aediag.o dvmodel.o
+mainframe.o: acdate.o aediag.o dvmodel.o serialize.o
 	$(INFO compiling mainframe.cpp)
 	g++ -g -c -o mainframe.o $(WX_INCLUDE_PATH) -I../include ../src/mainframe.cpp
 
