@@ -34,13 +34,16 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 	tag_entry = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxSize( 300,200 ), 0, NULL, 0 );
 	
 	tag_entry_context_menu = new wxMenu();
-	wxMenuItem* add_tag;
 	add_tag = new wxMenuItem( tag_entry_context_menu, wxID_ANY, wxString( wxT("Add Tag") ) , wxT("Add a new tag to the list"), wxITEM_NORMAL );
 	tag_entry_context_menu->Append( add_tag );
+	delete_tag = new wxMenuItem( tag_entry_context_menu, wxID_ANY, wxString( wxT("Remove Tag") ) , wxEmptyString, wxITEM_NORMAL );
+	tag_entry_context_menu->Append( delete_tag );
+
 	tag_entry->Connect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
 	fgSizer1->Add( tag_entry, 0, wxALL, 5 );
 
 	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(AddEventDialog::OnAddTag), this, add_tag->GetId());
+	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( AddEventDialog::OnRemoveTag ), this, delete_tag->GetId());
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
@@ -71,6 +74,7 @@ AddEventDialog::~AddEventDialog(void){
 	// Disconnect Events
 	ok_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnOK ), NULL, this );
 	cancel_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
+	tag_entry->Disconnect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
 	if(generated_activity)
 		delete generated_activity;
 }
@@ -99,6 +103,26 @@ void AddEventDialog::OnAddTag( wxCommandEvent& event ){
 		tag_entry->Refresh();
 		this->Refresh();
 	}
+}
+
+void AddEventDialog::OnRemoveTag(wxCommandEvent &event){
+	int selected=tag_entry->GetSelection();
+	if(selected!=wxNOT_FOUND){
+		std::string tag_to_remove=tag_entry->GetString(selected).ToStdString();
+		for(int i=0;i<cache.size();i++){
+			if(cache[i]==tag_to_remove){
+				std::vector<std::string>::iterator it=cache.begin();
+				if(i>0){
+					for(int j=1;j<=i;j++)
+						it++;
+				}
+				cache.erase(it);
+			}
+		}
+		tag_entry->Delete(selected);
+		this->Refresh();
+	}
+	return;
 }
 
 //Accessors

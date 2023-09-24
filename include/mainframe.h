@@ -43,7 +43,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 class MainFrame : public wxFrame {
 private:
-	//FIXME organize this a little better
+
 	wxDataViewCtrl* otd_activities;
 	wxDataViewColumn* activity_name;
 	wxDataViewColumn* activity_time;
@@ -70,7 +70,6 @@ private:
 	DVModel model;
 	void update_view(void);
 
-	//TODO build these out
 	void add_to_tags_cache(std::string);
 	void add_date(wxDateTime);
 	bool date_exists(wxDateTime);

@@ -47,6 +47,8 @@ private:
 	wxStaticText* m_staticText3;
 	wxListBox* tag_entry;
 	wxMenu* tag_entry_context_menu;
+	wxMenuItem* add_tag;
+	wxMenuItem* delete_tag;
 	wxButton* ok_btn;
 	wxButton* cancel_btn;
 	Activity *generated_activity;
@@ -54,7 +56,8 @@ private:
 	std::vector<std::string> cache;
 
 	// Virtual event handlers, override them in your derived class
-	virtual void OnAddTag( wxCommandEvent& event );
+	void OnAddTag( wxCommandEvent& event );
+	void OnRemoveTag(wxCommandEvent &event);
 	virtual void OnContextClick(wxContextMenuEvent &event);
 	virtual void OnOK( wxCommandEvent& event );
     virtual void OnCancel( wxCommandEvent& event );
