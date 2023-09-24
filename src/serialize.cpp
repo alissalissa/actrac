@@ -106,49 +106,51 @@ bool read_from_file(std::string filename,std::vector<date> &dates,std::vector<st
 		//Get the stream of date info
 		int32_t date_section_size=0;
 		handle.read(reinterpret_cast<char*>(&date_section_size),sizeof(int32_t));
-		//FIXME what if there are no encoded dates?
-		char *date_section_buffer=(char*)calloc(date_section_size,sizeof(char));
-		handle.read(date_section_buffer,date_section_size);
-		std::string date_section_stream(date_section_buffer); //FIXME what if there isn't a '\0' at the end of the stream?
-		//Get the actual date streams
-		//FIXME include parsing the actual date from the date field stream
-		std::vector<std::string> date_streams=split_str(date_section_stream,0x0d);
 
-		//Process each date stream
-		for_each(date_streams.begin(),date_streams.end(),[&](std::string ds){
-			if(ds.find(0x0c)==std::string::npos){
-				sfexception ex;
-				throw ex;
-			}
+		if(date_section_size>0){
+			char *date_section_buffer=(char*)calloc(date_section_size+1,sizeof(char));
+			handle.read(date_section_buffer,date_section_size);
+			date_section_buffer[date_section_size]='\0';
+			std::string date_section_stream(date_section_buffer);
+			//Get the actual date streams
+			std::vector<std::string> date_streams=split_str(date_section_stream,0x0d);
 
-			std::string date_string=ds.substr(0,ds.find(0x0c));
-			std::vector<std::string> date_fields=split_str(date_string,'/');
-			date d(std::stoi(date_fields[1]),static_cast<month_t>(std::stoi(date_fields[0])),std::stoi(date_fields[2]));
-			std::vector<std::string> activities=split_str(ds,0x0c);
-			if(activities[0][0]!=0x0c || activities[0].length()!=1){
-				sfexception ex;
-				throw ex;
-			}
-
-			activities.erase(activities.begin());
-			std::vector<Activity> acs;
-			for_each(activities.begin(),activities.end(),[&](std::string ac_stream){
-				std::vector<std::string> fields=split_str(ac_stream,0x0e);
-				if(fields.size()!=8){ //The number of expected fields
-					sfexception sf;
-					throw sf;
+			//Process each date stream
+			for_each(date_streams.begin(),date_streams.end(),[&](std::string ds){
+				if(ds.find(0x0c)==std::string::npos){
+					sfexception ex;
+					throw ex;
 				}
-				std::vector<std::string> tag_fields_buffer=split_str(fields[3],0x0b);
-				std::string tag_fields[tag_fields_buffer.size()+1];
-				for(int i=0;i<tag_fields_buffer.size();i++)
-					tag_fields[i]=tag_fields_buffer[i];
-				tag_fields[tag_fields_buffer.size()]="\0";
-				ActivityID id(std::stoi(fields[0]),fields[1]);
-				Activity ac(id,fields[2],tag_fields,std::stof(fields[4]),std::stoi(fields[5]),std::stoi(fields[6]),std::stoi(fields[7]));
-				d.AddActivity(ac);
+
+				std::string date_string=ds.substr(0,ds.find(0x0c));
+				std::vector<std::string> date_fields=split_str(date_string,'/');
+				date d(std::stoi(date_fields[1]),static_cast<month_t>(std::stoi(date_fields[0])),std::stoi(date_fields[2]));
+				std::vector<std::string> activities=split_str(ds,0x0c);
+				if(activities[0][0]!=0x0c || activities[0].length()!=1){
+					sfexception ex;
+					throw ex;
+				}
+
+				activities.erase(activities.begin());
+				std::vector<Activity> acs;
+				for_each(activities.begin(),activities.end(),[&](std::string ac_stream){
+					std::vector<std::string> fields=split_str(ac_stream,0x0e);
+					if(fields.size()!=8){ //The number of expected fields
+						sfexception sf;
+						throw sf;
+					}
+					std::vector<std::string> tag_fields_buffer=split_str(fields[3],0x0b);
+					std::string tag_fields[tag_fields_buffer.size()+1];
+					for(int i=0;i<tag_fields_buffer.size();i++)
+						tag_fields[i]=tag_fields_buffer[i];
+					tag_fields[tag_fields_buffer.size()]="\0";
+					ActivityID id(std::stoi(fields[0]),fields[1]);
+					Activity ac(id,fields[2],tag_fields,std::stof(fields[4]),std::stoi(fields[5]),std::stoi(fields[6]),std::stoi(fields[7]));
+					d.AddActivity(ac);
+				});
+				dates.push_back(d);
 			});
-			dates.push_back(d);
-		});
+		}
 		if(handle.get()!=ACSERIALIZE_MAGIC_NUMBER){
 			sfexception ex;
 			throw ex;
