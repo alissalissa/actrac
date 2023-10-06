@@ -2,6 +2,7 @@
 #define __ACTRAC_MAINFRAME_H__
 
 #include <algorithm>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -34,10 +35,11 @@
 #include "activity.h"
 #include "dvmodel.h"
 #include "idgen.h"
+#include "serialize.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-
+//TODO Add in date selection and refresh
 ///////////////////////////////////////////////////////////////////////////////
 /// Class MainFrame
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,17 +60,17 @@ private:
 	wxMenu* file_menu;
 	DVModel *activity_model;
 
-	// Virtual event handlers, override them in your derived class
 	//virtual void OnEditEvent( wxCommandEvent& event ) { event.Skip(); }
 	void OnQuit( wxCommandEvent& );
 	void OnAddEvent(wxCommandEvent&);
 	void OnRemoveEvent(wxCommandEvent &evt){evt.Skip();}
+	void OnSave(wxCommandEvent&);
 
 	//Intternal model/view
 	std::vector <date> utilized_dates;
 	std::vector <std::string> tags_cache;
 	DVModel model;
-	void update_view(void);
+	//void update_view(void);
 
 	void add_to_tags_cache(std::string);
 	void add_date(wxDateTime);

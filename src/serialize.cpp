@@ -8,7 +8,7 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 	}
 	//Write the magic number to get started
 	try{
-		output.write(reinterpret_cast<const char*>(&ACSERIALIZE_MAGIC_NUMBER),sizeof(int32_t));
+		output.write(&ACSERIALIZE_MAGIC_NUMBER,sizeof(char));
 		//Calculate the size of the next section
 		//	We start with the number of tag seperators, INCLUDING the end of section magic number
 		int32_t tag_section_size=tags.size();
@@ -38,6 +38,7 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 				date_info<<ac.Tags().size();
 				date_info<<0x0e;
 				for_each(ac.Tags().begin(),ac.Tags().end(),[&](std::string t){
+					//FIXME Why isn't tag info being encoded here?
 					date_info<<t;
 					if(t!=(*ac.Tags().end()))
 						date_info<<0x0b;
@@ -63,7 +64,7 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 		std::ostringstream date_info_length;
 		date_info_length<<date_info_buffer.length()<<date_info_buffer;
 		output.write(date_info_length.str().c_str(),date_info_length.str().length());
-		output.write(reinterpret_cast<const char*>(ACSERIALIZE_MAGIC_NUMBER),sizeof(int32_t));
+		output.write(&ACSERIALIZE_MAGIC_NUMBER,sizeof(char));
 	}catch(std::exception e){
 		std::cout<<e.what()<<std::endl;
 		output.close();

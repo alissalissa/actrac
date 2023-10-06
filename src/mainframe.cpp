@@ -71,8 +71,9 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->Layout();
 	menu_bar = new wxMenuBar( 0 );
 	file_menu = new wxMenu();
-	wxMenuItem* file_menu_quit;
-	file_menu_quit = new wxMenuItem( file_menu, wxID_ANY, wxString( wxT("Quit") ) , wxEmptyString, wxITEM_NORMAL );
+	wxMenuItem* save_menu_item = new wxMenuItem( file_menu, wxID_ANY, wxString( wxT("Save") ) + wxT('\t') + wxT("CTRL-s"), wxEmptyString, wxITEM_NORMAL );
+	file_menu->Append( save_menu_item );
+	wxMenuItem* file_menu_quit = new wxMenuItem( file_menu, wxID_ANY, wxString( wxT("Quit") ) , wxEmptyString, wxITEM_NORMAL );
 	file_menu->Append( file_menu_quit );
 
 	menu_bar->Append( file_menu, wxT("File") );
@@ -85,16 +86,15 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	// Connect Events
 	//edit_event_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
 	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnQuit ), this, file_menu_quit->GetId());
+	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnSave ), this, save_menu_item->GetId());
 	add_evt_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
 
 }
 
-MainFrame::~MainFrame()
-{
+MainFrame::~MainFrame(void) {
 	// Disconnect Events
 	add_evt_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
 	//edit_event_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
-
 }
 
 //Internal Model
@@ -146,9 +146,13 @@ void MainFrame::OnQuit(wxCommandEvent &evt){
 	wxExit();
 }
 
-//Internal model/view
-void MainFrame::update_view(void){
-	
+void MainFrame::OnSave(wxCommandEvent &evt){
+	wxFileDialog selector_diag(this,wxT("Save events to file"),wxT(""),wxT(""),wxT(".dat"),wxFD_SAVE);
+	if(selector_diag.ShowModal()==wxID_OK){
+		std::cout<<selector_diag.GetPath().ToStdString()<<std::endl;
+		if(!write_to_file(selector_diag.GetPath().ToStdString(),utilized_dates,tags_cache))
+			std::cout<<"Error writing file..."<<std::endl;
+	}
 }
 
 void MainFrame::OnAddEvent(wxCommandEvent &evt){

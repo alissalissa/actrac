@@ -648,6 +648,20 @@
                         <property name="unchecked_bitmap"></property>
                         <event name="OnMenuSelection">wxExit</event>
                     </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Save</property>
+                        <property name="name">save_menu_item</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut">CTRL-s</property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnSave</event>
+                    </object>
                 </object>
             </object>
         </object>
@@ -1079,6 +1093,20 @@
                                 <property name="shortcut"></property>
                                 <property name="unchecked_bitmap"></property>
                                 <event name="OnMenuSelection">OnAddTag</event>
+                            </object>
+                            <object class="wxMenuItem" expanded="1">
+                                <property name="bitmap"></property>
+                                <property name="checked">0</property>
+                                <property name="enabled">1</property>
+                                <property name="help"></property>
+                                <property name="id">wxID_ANY</property>
+                                <property name="kind">wxITEM_NORMAL</property>
+                                <property name="label">Remove Tag</property>
+                                <property name="name">delete_tag</property>
+                                <property name="permission">none</property>
+                                <property name="shortcut"></property>
+                                <property name="unchecked_bitmap"></property>
+                                <event name="OnMenuSelection">OnRemoveTag</event>
                             </object>
                         </object>
                     </object>
