@@ -43,10 +43,12 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 	edit_tag->Enable( false );
 
 	tag_entry->Connect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
+	
 	fgSizer1->Add( tag_entry, 0, wxALL, 5 );
 
 	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(AddEventDialog::OnAddTag), this, add_tag->GetId());
 	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( AddEventDialog::OnRemoveTag ), this, delete_tag->GetId());
+	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( AddEventDialog::OnEditTag ), this, edit_tag->GetId());
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
@@ -69,6 +71,7 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	tag_entry->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( AddEventDialog::OnSelect ), NULL, this );
 	ok_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnOK ), NULL, this );
 	cancel_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
 }
@@ -78,6 +81,7 @@ AddEventDialog::~AddEventDialog(void){
 	ok_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnOK ), NULL, this );
 	cancel_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
 	tag_entry->Disconnect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
+	tag_entry->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( AddEventDialog::OnSelect ), NULL, this );
 }
 
 //Event management
@@ -93,6 +97,10 @@ void AddEventDialog::OnContextClick(wxContextMenuEvent &event){
 	PopupMenu(tag_entry_context_menu);
 	//std::cout<<"X="<<event.GetPosition().x<<std::endl;
 	//std::cout<<"Y="<<event.GetPosition().y<<std::endl;
+}
+
+void AddEventDialog::OnSelect(wxCommandEvent &event){
+	edit_tag->Enable(true);
 }
 
 void AddEventDialog::OnAddTag( wxCommandEvent& event ){
@@ -124,6 +132,19 @@ void AddEventDialog::OnRemoveTag(wxCommandEvent &event){
 		this->Refresh();
 	}
 	return;
+}
+
+void AddEventDialog::OnEditTag(wxCommandEvent &event){
+	AddTagDialog diag(this,cache);
+	if(diag.ShowModal()==wxOK){
+		wxString temp_tag=diag.get_tag();
+		int index=tag_entry->GetSelection();
+		tag_entry->Delete(index);
+		edit_tag->Enable(false);
+		tag_entry->InsertItems(1,&temp_tag,index);
+		tag_entry->Refresh();
+		this->Refresh();
+	}
 }
 
 //Accessors

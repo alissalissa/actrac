@@ -36,7 +36,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class AddEventDialog
 ///////////////////////////////////////////////////////////////////////////////
-//TODO How do we edit tags?
 class AddEventDialog : public wxDialog{
 private:
 
@@ -58,9 +57,11 @@ private:
 	// Virtual event handlers, override them in your derived class
 	void OnAddTag( wxCommandEvent& event );
 	void OnRemoveTag(wxCommandEvent &event);
-	virtual void OnContextClick(wxContextMenuEvent &event);
-	virtual void OnOK( wxCommandEvent& event );
-    virtual void OnCancel( wxCommandEvent& event );
+	void OnContextClick(wxContextMenuEvent &event);
+	void OnOK( wxCommandEvent& event );
+    void OnCancel( wxCommandEvent& event );
+	void OnSelect( wxCommandEvent& event );
+	void OnEditTag( wxCommandEvent& event );
 
 public:
 
