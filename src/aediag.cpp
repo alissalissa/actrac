@@ -38,6 +38,9 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 	tag_entry_context_menu->Append( add_tag );
 	delete_tag = new wxMenuItem( tag_entry_context_menu, wxID_ANY, wxString( wxT("Remove Tag") ) , wxEmptyString, wxITEM_NORMAL );
 	tag_entry_context_menu->Append( delete_tag );
+	edit_tag = new wxMenuItem( tag_entry_context_menu, wxID_ANY, wxString( wxT("Edit Tag") ) , wxEmptyString, wxITEM_NORMAL );
+	tag_entry_context_menu->Append( edit_tag );
+	edit_tag->Enable( false );
 
 	tag_entry->Connect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
 	fgSizer1->Add( tag_entry, 0, wxALL, 5 );
@@ -75,8 +78,6 @@ AddEventDialog::~AddEventDialog(void){
 	ok_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnOK ), NULL, this );
 	cancel_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
 	tag_entry->Disconnect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
-	if(generated_activity)
-		delete generated_activity;
 }
 
 //Event management

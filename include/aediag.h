@@ -49,9 +49,9 @@ private:
 	wxMenu* tag_entry_context_menu;
 	wxMenuItem* add_tag;
 	wxMenuItem* delete_tag;
+	wxMenuItem *edit_tag;
 	wxButton* ok_btn;
 	wxButton* cancel_btn;
-	Activity *generated_activity;
 
 	std::vector<std::string> cache;
 
