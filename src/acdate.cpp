@@ -21,6 +21,8 @@ date::date(const date &haystack){
 	day=haystack.day;
 	month=haystack.month;
 	year=haystack.year;
+	for(auto ac : haystack.activities)
+		this->activities.push_back(ac);
 }
 /*****************END CONSTRUCTOR****************/
 
@@ -104,6 +106,8 @@ date date::operator=(date haystack){
 	day=haystack.Day();
 	month=haystack.Month();
 	year=haystack.Year();
+	for(auto ac : haystack.activities)
+		this->activities.push_back(ac);
 	return haystack;
 }
 

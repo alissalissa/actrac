@@ -12,24 +12,23 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 		//Calculate the size of the next section
 		//	We start with the number of tag seperators, INCLUDING the end of section magic number
 		int32_t tag_section_size=tags.size();
-		for_each(tags.begin(),tags.end(),[&](std::string tag){
+		for(auto tag : tags)
 			tag_section_size+=tag.length();
-		});
 
 		//write the tag section to the file
 		output.write(reinterpret_cast<char*>(&tag_section_size),sizeof(int32_t));
-		for_each(tags.begin(),tags.end(),[&](std::string tag){
+		for(auto tag : tags){
 			output.write(tag.c_str(),tag.length());
-			const int32_t seperator=(tag==(*tags.end()))?0x0d:0x0a;
+			const int32_t seperator=(tag==tags[tags.size()-1])?0x0d:0x0a;
 			output.write(reinterpret_cast<const char*>(&seperator),sizeof(int32_t));
-		});
+		}
 
 		//Create a string to encapsulate the date section
 		//	The length of the section will be prepended after
 		std::ostringstream date_info;
-		for_each(dates.begin(),dates.end(),[&](date d){
+		for(auto d : dates){
 			date_info<<d.toStdStr("%mm%dd%yyyy");
-			for_each(d.Activities().begin(),d.Activities().end(),[&](Activity ac){
+			for(auto ac : d.Activities()){
 				date_info<<(char)0x0c;
 				date_info<<ac.ID().Index();
 				date_info<<(char)0x0e;
@@ -37,12 +36,11 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 				date_info<<(char)0x0e;
 				date_info<<ac.Tags().size();
 				date_info<<0x0e;
-				for_each(ac.Tags().begin(),ac.Tags().end(),[&](std::string t){
-					//FIXME Why isn't tag info being encoded here?
+				for(auto t : ac.Tags()){
 					date_info<<t;
-					if(t!=(*ac.Tags().end()))
+					if(t!=ac.Tags()[ac.Tags().size()-1])
 						date_info<<0x0b;
-				});
+				}
 				date_info<<0x0e;
 				date_info<<ac.Hours();
 				date_info<<0x0e;
@@ -56,10 +54,10 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 				date_info<<ac.RecurrenceFrequency();
 				if(ac!=(*d.Activities().end()))
 					date_info<<0x0c;
-			});
-			if(d!=(*dates.end()))
+			}
+			if(d!=dates[dates.size()-1])
 				date_info<<0x0d;
-		});
+		};
 		std::string date_info_buffer=date_info.str();
 		std::ostringstream date_info_length;
 		date_info_length<<date_info_buffer.length()<<date_info_buffer;

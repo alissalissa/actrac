@@ -641,12 +641,12 @@
                         <property name="help"></property>
                         <property name="id">wxID_ANY</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Quit</property>
-                        <property name="name">file_menu_quit</property>
+                        <property name="label">Save</property>
+                        <property name="name">save_menu_item</property>
                         <property name="permission">none</property>
-                        <property name="shortcut"></property>
+                        <property name="shortcut">CTRL-s</property>
                         <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection">wxExit</event>
+                        <event name="OnMenuSelection">OnSave</event>
                     </object>
                     <object class="wxMenuItem" expanded="1">
                         <property name="bitmap"></property>
@@ -655,12 +655,26 @@
                         <property name="help"></property>
                         <property name="id">wxID_ANY</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Save</property>
-                        <property name="name">save_menu_item</property>
+                        <property name="label">Load From File</property>
+                        <property name="name">load_menu_item</property>
                         <property name="permission">none</property>
-                        <property name="shortcut">CTRL-s</property>
+                        <property name="shortcut">ctrl-o</property>
                         <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection">OnSave</event>
+                        <event name="OnMenuSelection">OnLoad</event>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Quit</property>
+                        <property name="name">file_menu_quit</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">wxExit</event>
                     </object>
                 </object>
             </object>

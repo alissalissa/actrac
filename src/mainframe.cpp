@@ -150,7 +150,7 @@ void MainFrame::OnSave(wxCommandEvent &evt){
 	wxFileDialog selector_diag(this,wxT("Save events to file"),wxT(""),wxT(""),wxT(".dat"),wxFD_SAVE);
 	if(selector_diag.ShowModal()==wxID_OK){
 		std::cout<<selector_diag.GetPath().ToStdString()<<std::endl;
-		if(!write_to_file(selector_diag.GetPath().ToStdString(),utilized_dates,tags_cache))
+		if(!write_to_file(selector_diag.GetPath().ToStdString(),this->utilized_dates,tags_cache))
 			std::cout<<"Error writing file..."<<std::endl;
 	}
 }
@@ -162,16 +162,15 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 		int index=binary_search<date>(utilized_dates,create_date(cd));
 		if(utilized_dates.size()==0){
 			date d(cd);
-			std::vector<date>::iterator it=utilized_dates.begin();
 			//FIXME this conditional block can be optimized better by switching order
-			utilized_dates.insert(it,d);
+			utilized_dates.push_back(d);
 		}else if(utilized_dates[index]!=create_date(cd)){
 			date d(cd);
-			std::vector<date>::iterator it=utilized_dates.begin();
 			//FIXME this conditional block can be optimized better by switching order
 			if(index==0)
-				utilized_dates.insert(it,d);
+				utilized_dates.push_back(d);
 			else{
+				std::vector<date>::iterator it=utilized_dates.begin();
 				for(int i=1;i<=index;i++)
 					it++;
 				utilized_dates.insert(it,d);

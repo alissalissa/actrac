@@ -1,7 +1,7 @@
 #Makefile for actrac
 
-WX_INCLUDE_PATH=`/usr/wx3.2.2.1/wx-dynamic-build/wx-config --cppflags`
-WX_LIBS=`/usr/wx3.2.2.1/wx-dynamic-build/wx-config --libs`
+WX_INCLUDE_PATH=`/usr/wx3.2.3/wx-dynamic-build/wx-config --cppflags`
+WX_LIBS=`/usr/wx3.2.3/wx-dynamic-build/wx-config --libs`
 
 default: main
 
