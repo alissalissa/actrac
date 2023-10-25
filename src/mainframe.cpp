@@ -83,18 +83,22 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 
 	this->Centre( wxBOTH );
 
+	selected_column=-1;
+	selected_row=-1;
+
 	// Connect Events
-	//edit_event_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
+	edit_event_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
 	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnQuit ), this, file_menu_quit->GetId());
 	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnSave ), this, save_menu_item->GetId());
 	add_evt_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
-
+	otd_activities->Connect(wxEVT_DATAVIEW_SELECTION_CHANGED,wxDataViewEventHandler(MainFrame::OnSelectActivity),NULL,this);
 }
 
 MainFrame::~MainFrame(void) {
 	// Disconnect Events
 	add_evt_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
-	//edit_event_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
+	otd_activities->Disconnect(wxEVT_DATAVIEW_SELECTION_CHANGED,wxDataViewEventHandler(MainFrame::OnSelectActivity),NULL,this);
+	edit_event_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
 }
 
 //Internal Model
@@ -190,22 +194,14 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	}
 }
 
-template <class T> int binary_search(std::vector<T> haystack,T delimiter){
-	if(haystack.size()==0)
-		return 0;
-	if(haystack.size()==1)
-		return delimiter<haystack[0]?0:1;
-	//haystack size>=2
-	if(delimiter<haystack[haystack.size()/2]){
-		std::vector<T> next_haystack;
-		for(int i=0;i<(haystack.size()/2);i++)
-			next_haystack.push_back(haystack[i]);
-		return binary_search<T>(next_haystack,delimiter);
-	}else if(haystack[haystack.size()/2]<delimiter){
-		std::vector<T> next_haystack;
-		for(int i=(haystack.size()/2);i<haystack.size();i++)
-			next_haystack.push_back(haystack[i]);
-		return binary_search<T>(next_haystack,delimiter)+next_haystack.size();
-	}
-	return haystack.size()/2;
+void MainFrame::OnEditEvent(wxCommandEvent &evt){
+	std::cout<<"Edit event!"<<std::endl;
+}
+
+void MainFrame::OnRemoveEvent(wxCommandEvent &evt){
+	evt.Skip();
+}
+
+void MainFrame::OnSelectActivity(wxDataViewEvent &evt){
+	evt.Skip();
 }

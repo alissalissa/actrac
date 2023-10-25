@@ -33,6 +33,7 @@
 #include "aediag.h"
 #include "acdate.h"
 #include "activity.h"
+#include "acutil.h"
 #include "dvmodel.h"
 #include "idgen.h"
 #include "serialize.h"
@@ -63,13 +64,17 @@ private:
 	//virtual void OnEditEvent( wxCommandEvent& event ) { event.Skip(); }
 	void OnQuit( wxCommandEvent& );
 	void OnAddEvent(wxCommandEvent&);
-	void OnRemoveEvent(wxCommandEvent &evt){evt.Skip();}
+	void OnEditEvent(wxCommandEvent&);
+	void OnRemoveEvent(wxCommandEvent &evt);
 	void OnSave(wxCommandEvent&);
+	void OnSelectActivity(wxDataViewEvent&);
 
 	//Intternal model/view
 	std::vector <date> utilized_dates;
 	std::vector <std::string> tags_cache;
 	DVModel model;
+	int selected_column;
+	int selected_row;
 	//void update_view(void);
 
 	void add_to_tags_cache(std::string);
@@ -83,7 +88,5 @@ public:
 	virtual ~MainFrame();
 
 };
-
-template <class T> int binary_search(std::vector<T>,T);
 
 #endif

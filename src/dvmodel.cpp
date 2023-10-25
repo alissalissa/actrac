@@ -1,6 +1,7 @@
 //Implementation for the DVModel and DVPair classes
 #include "dvmodel.h"
 
+//TODO is there a way to re-implement this as a binary search?
 int DVModel::search(const DVPair<std::string,float> haystack) const {
 	for(int i=0;i<data.size();i++)
 		if(data[i]==haystack)

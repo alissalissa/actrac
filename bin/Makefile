@@ -45,5 +45,9 @@ serialize.o: activity.o acdate.o
 	$(info compiling serialize.cpp)
 	g++ -g -c -o serialize.o $(WX_INCLUDE_PATH) -I../include ../src/serialize.cpp
 
+#acutil.o:
+#	$(info compiling acutil.cpp)
+#	g++ -g -c -o acutil.o $(WX_INCLUDE_PATH) -I../include ../src/acutil.cpp
+
 clean:
 	rm *.o actrac
