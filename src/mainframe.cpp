@@ -83,7 +83,6 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 
 	this->Centre( wxBOTH );
 
-	selected_column=-1;
 	selected_row=-1;
 
 	// Connect Events
@@ -203,5 +202,16 @@ void MainFrame::OnRemoveEvent(wxCommandEvent &evt){
 }
 
 void MainFrame::OnSelectActivity(wxDataViewEvent &evt){
-	evt.Skip();
+	selected_row=activity_model->GetRowByItem(evt.GetItem());
+	if(selected_row<0){
+		MFException except;
+		throw except;
+	}
+	std::cout<<"Row = "<<selected_row<<std::endl;
+}
+
+//MFException stuff
+const char *MFException::what(void) const noexcept {
+	const std::string message="Exception thrown within the MainFrame class.";
+	return message.c_str();
 }

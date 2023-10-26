@@ -2,6 +2,7 @@
 #define __ACTRAC_MAINFRAME_H__
 
 #include <algorithm>
+#include <exception>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -39,6 +40,10 @@
 #include "serialize.h"
 
 ///////////////////////////////////////////////////////////////////////////
+class MFException : std::exception {
+public:
+	const char *what(void) const noexcept;
+};
 
 //TODO Add in date selection and refresh
 ///////////////////////////////////////////////////////////////////////////////
@@ -72,8 +77,6 @@ private:
 	//Intternal model/view
 	std::vector <date> utilized_dates;
 	std::vector <std::string> tags_cache;
-	DVModel model;
-	int selected_column;
 	int selected_row;
 	//void update_view(void);
 
