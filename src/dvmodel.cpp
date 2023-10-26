@@ -66,3 +66,10 @@ bool DVModel::DeleteRow(const unsigned int row){
 	}
 	return true;
 }
+
+int DVModel::GetRowByItem(const wxDataViewItem item) const {
+	for(unsigned int i=0;i<data.size();i++)
+		if(this->GetItem(i)==item)
+			return i;
+	return -1;
+}

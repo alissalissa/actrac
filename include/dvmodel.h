@@ -74,6 +74,7 @@ public:
 	bool SetValueByRow(const wxVariant&,unsigned int,unsigned int) wxOVERRIDE;
 	bool AddRow(const DVPair<std::string,float>*);
 	bool DeleteRow(const unsigned int);
+	int GetRowByItem(const wxDataViewItem) const;
 
 };
 
