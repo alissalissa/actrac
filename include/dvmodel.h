@@ -67,8 +67,6 @@ public:
 	DVModel(void)=default;
 	~DVModel(void)=default;
 
-	int search(const DVPair<std::string,float>) const;
-
 	//Accessors / modifiers
 	void GetValueByRow(wxVariant&,unsigned int,unsigned int) const wxOVERRIDE;
 	bool SetValueByRow(const wxVariant&,unsigned int,unsigned int) wxOVERRIDE;
