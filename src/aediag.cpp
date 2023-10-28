@@ -150,10 +150,11 @@ void AddEventDialog::OnEditTag(wxCommandEvent &event){
 //Accessors
 Activity AddEventDialog::get_generated_activity(ActivityID id_to_add){
 	std::vector<std::string> ts;
-	if(tag_entry->GetCount()>0)
+	if(tag_entry->GetCount()>0){
 		for(int i=0;i<tag_entry->GetCount();i++)
 			ts.push_back(tag_entry->GetString(i).ToStdString());
-	ts.push_back("\0");
-	Activity ac(id_to_add,get_activity_label(),ts.data(),static_cast<float>(hour_entry->GetValue()),true,0,-1);
+		ts.push_back("\0");
+	}
+	Activity ac(id_to_add,get_activity_label(),(ts.size()>0)?ts.data():NULL,static_cast<float>(hour_entry->GetValue()),true,0,-1);
 	return ac;
 }

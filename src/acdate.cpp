@@ -102,6 +102,10 @@ bool date::operator==(wxDateTime haystack){
 	return true;
 }
 
+bool date::operator!=(wxDateTime haystack){
+	return !(this->operator==(haystack));
+}
+
 date date::operator=(date haystack){
 	day=haystack.Day();
 	month=haystack.Month();

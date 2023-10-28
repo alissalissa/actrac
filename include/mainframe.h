@@ -73,6 +73,7 @@ private:
 	void OnRemoveEvent(wxCommandEvent &evt);
 	void OnSave(wxCommandEvent&);
 	void OnSelectActivity(wxDataViewEvent&);
+	void OnNewDate( wxCalendarEvent& event ) { event.Skip(); }
 
 	//Intternal model/view
 	std::vector <date> utilized_dates;

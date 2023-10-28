@@ -91,6 +91,8 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnSave ), this, save_menu_item->GetId());
 	add_evt_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
 	otd_activities->Connect(wxEVT_DATAVIEW_SELECTION_CHANGED,wxDataViewEventHandler(MainFrame::OnSelectActivity),NULL,this);
+	date_selector->Connect( wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEventHandler( MainFrame::OnNewDate ), NULL, this );
+
 }
 
 MainFrame::~MainFrame(void) {
@@ -98,6 +100,8 @@ MainFrame::~MainFrame(void) {
 	add_evt_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
 	otd_activities->Disconnect(wxEVT_DATAVIEW_SELECTION_CHANGED,wxDataViewEventHandler(MainFrame::OnSelectActivity),NULL,this);
 	edit_event_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
+	date_selector->Disconnect( wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEventHandler( MainFrame::OnNewDate ), NULL, this );
+
 }
 
 //Internal Model
