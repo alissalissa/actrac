@@ -126,15 +126,9 @@ void MainFrame::add_date(wxDateTime haystack){
 	//Not already in the list
 	date to_add(haystack);
 	int insert_index=binary_search<date>(utilized_dates,to_add);
-	//FIXME this conditional can be optimized out
-	if(insert_index==0)
-		utilized_dates.insert(utilized_dates.begin(),to_add);
-	else{
-		std::vector<date>::iterator insert_it=utilized_dates.begin();
-		for(int i=1;i<=insert_index;i++)
-			insert_it++;
-		utilized_dates.insert(insert_it,to_add);
-	}
+	std::vector<date>::iterator it=utilized_dates.begin();
+	for(int i=1;i<=insert_index;i++) it++;
+	utilized_dates.insert(it,to_add);
 }
 
 bool MainFrame::date_exists(wxDateTime comparator){
