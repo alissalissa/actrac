@@ -163,19 +163,13 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 		int index=binary_search<date>(utilized_dates,create_date(cd));
 		if(utilized_dates.size()==0){
 			date d(cd);
-			//FIXME this conditional block can be optimized better by switching order
 			utilized_dates.push_back(d);
 		}else if(utilized_dates[index]!=create_date(cd)){
 			date d(cd);
-			//FIXME this conditional block can be optimized better by switching order
-			if(index==0)
-				utilized_dates.push_back(d);
-			else{
-				std::vector<date>::iterator it=utilized_dates.begin();
-				for(int i=1;i<=index;i++)
-					it++;
-				utilized_dates.insert(it,d);
-			}
+			std::vector<date>::iterator it=utilized_dates.begin();
+			for(int i=1;i<=index;i++)
+				it++;
+			utilized_dates.insert(it,d);
 		}
 
 		ActivityID id_to_add=gen_ac_id(utilized_dates[index].Activities(),diag->get_activity_label());
