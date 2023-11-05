@@ -167,33 +167,63 @@ void MainFrame::OnSave(wxCommandEvent &evt){
 }
 
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
+	//FIXME subsequent events for the same date are being added to additional erroneous date objects
 	AddEventDialog *diag=new AddEventDialog(this,tags_cache);
 	if(diag->ShowModal()==wxOK){
-		wxDateTime cd=date_selector->GetDate();
-		int index=binary_search<date>(utilized_dates,create_date(cd));
-		if(utilized_dates.size()==0){
-			date d(cd);
-			std::cout<<"Adding date "<<d.toStdStr()<<" to the list...."<<std::endl;
-			utilized_dates.push_back(d);
-		}else if(utilized_dates[index]!=create_date(cd)){
-			date d(cd);
-			std::vector<date>::iterator it=utilized_dates.begin();
-			for(int i=1;i<=index;i++)
-				it++;
-			utilized_dates.insert(it,d);
+		//In order to generate a new activity,
+		//	we first need to generate an ID.
+		//	In order to do that, we need to establish a date object
+		ActivityID new_id;
+		try{
+			if(date_exists(date_selector->GetDate())){
+				//Yes, we have an established date, so let's get the ID.
+				int index=binary_search<date>(utilized_dates,create_date(date_selector->GetDate()));
+				if(utilized_dates.size()==1){
+					//There's only one date, and we know it's our's because the date exists
+					new_id=gen_ac_id(utilized_dates[0].Activities(),diag->get_activity_label());
+					utilized_dates[0].AddActivity(diag->get_generated_activity(new_id));
+				}else{
+					//We know size>1 because if size==0, date_exists would return false
+					//We know index<size, because otherwise exists would have returned false
+					new_id=gen_ac_id(utilized_dates[index].Activities(),diag->get_activity_label());
+					utilized_dates[index].AddActivity(diag->get_generated_activity(new_id));
+				}
+				std::vector<DVPair<std::string,float> > new_model;
+				for(auto ac : utilized_dates[index].Activities()){
+					DVPair<std::string,float> *pair_buffer=new DVPair<std::string,float>(ac.Label(),ac.Hours());
+					new_model.push_back(*pair_buffer);
+					delete pair_buffer;
+				}
+				activity_model->Rebuild(new_model);
+			}else{
+				//We need to create a new date
+				date new_date(date_selector->GetDate());
+				//Get our insertion point
+				int insertion_point=binary_search<date>(utilized_dates,new_date);
+				std::vector<date>::iterator insertion_iterator=utilized_dates.begin();
+				for(int i=1;i<=insertion_point;i++) insertion_iterator++;
+				utilized_dates.insert(insertion_iterator,new_date);
+				//Now we know for sure the date exissts
+				int index=binary_search<date>(utilized_dates,new_date);
+				new_id=gen_ac_id(new_date.Activities(),diag->get_activity_label());
+				utilized_dates[index].AddActivity(diag->get_generated_activity(new_id));
+				std::vector<DVPair<std::string,float> > new_model;
+				for(auto ac : utilized_dates[index].Activities()){
+					DVPair<std::string,float> *pair_buffer=new DVPair<std::string,float>(ac.Label(),ac.Hours());
+					new_model.push_back(*pair_buffer);
+					delete pair_buffer;
+				}
+				activity_model->Rebuild(new_model);
+			}
+		}catch(std::exception e){
+			std::cout<<e.what()<<std::endl;
+			wxExit();
+		}catch(int e){
+			std::cout<<"caught code "<<e<<std::endl;
+			wxExit();
 		}
-
-		ActivityID id_to_add=gen_ac_id(utilized_dates[index].Activities(),diag->get_activity_label());
-		Activity ac_to_add(diag->get_generated_activity(id_to_add));
-		for(auto t : ac_to_add.Tags())
-			this->add_to_tags_cache(t);
-		
-		utilized_dates[index].AddActivity(ac_to_add);
-		std::cout<<"Added activity "<<ac_to_add.ID().str()<<std::endl;
-		DVPair <std::string,float> *to_add=new DVPair<std::string,float>(ac_to_add.Label(),ac_to_add.Hours());
-		activity_model->AddRow(to_add);
-		delete to_add;
 	}
+	Refresh();
 }
 
 void MainFrame::OnEditEvent(wxCommandEvent &evt){
@@ -219,7 +249,6 @@ void MainFrame::OnSelectDate(wxCalendarEvent &evt){
 		date selected_date(evt.GetDate());
 		std::cout<<"Selected date "<<selected_date.toStdStr()<<" exists!"<<std::endl;
 		int index=binary_search<date>(utilized_dates,create_date(evt.GetDate()));
-		//FIXME this conditional tree does not adequately address all cases
 		if(index==utilized_dates.size() && utilized_dates.size()!=0){
 			if(utilized_dates[index-1]==evt.GetDate()){
 				for(auto ac : utilized_dates[index-1].Activities()){
