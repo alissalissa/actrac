@@ -13,7 +13,7 @@ date::date(short d,month_t m,short y){
 
 date::date(const wxDateTime &haystack){
 	day=haystack.GetDay();
-	month=static_cast<month_t>(haystack.GetMonth());
+	month=static_cast<month_t>(static_cast<int>(haystack.GetMonth())+1);
 	year=haystack.GetYear();
 }
 
@@ -97,9 +97,15 @@ bool date::operator!=(date haystack){
 }
 
 bool date::operator==(wxDateTime haystack){
-	if(year!=haystack.GetYear() || static_cast<int>(month)!=static_cast<int>(haystack.GetMonth()) || day!=haystack.GetDay())
-		return false;
-	return true;
+	date comparator(haystack);
+	try{
+		std::cout<<"Comparing "<<this->toStdStr()<<" with "<<comparator.toStdStr()<<std::endl;
+	}catch(int e){
+		std::cout<<"Caught exception code "<<e<<std::endl;
+	}catch(std::exception e){
+		std::cout<<e.what()<<std::endl;
+	}
+	return this->operator==(comparator);
 }
 
 bool date::operator!=(wxDateTime haystack){

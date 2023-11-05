@@ -31,6 +31,7 @@ bool DVModel::SetValueByRow(const wxVariant &haystack,unsigned int row,unsigned 
 
 bool DVModel::AddRow(const DVPair<std::string,float> *haystack){
 	try{
+		//FIXME this can be more efficient with a binary search instead of resorting every time
 		data.push_back(*haystack);
 		std::sort(data.begin(),data.end());
 		Reset(data.size());
@@ -64,4 +65,10 @@ int DVModel::GetRowByItem(const wxDataViewItem item) const {
 		if(this->GetItem(i)==item)
 			return i;
 	return -1;
+}
+
+void DVModel::Rebuild(std::vector<DVPair<std::string,float> > new_set){
+	data.clear();
+	data=new_set;
+	Reset(data.size());
 }

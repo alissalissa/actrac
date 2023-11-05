@@ -1,7 +1,7 @@
 #ifndef __ACTRAC_MAINFRAME_H__
 #define __ACTRAC_MAINFRAME_H__
 
-#include <algorithm>
+//#include <algorithm>
 #include <exception>
 #include <iostream>
 #include <string>
@@ -45,7 +45,6 @@ public:
 	const char *what(void) const noexcept;
 };
 
-//TODO Add in date selection and refresh
 ///////////////////////////////////////////////////////////////////////////////
 /// Class MainFrame
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,7 +72,7 @@ private:
 	void OnRemoveEvent(wxCommandEvent &evt);
 	void OnSave(wxCommandEvent&);
 	void OnSelectActivity(wxDataViewEvent&);
-	void OnNewDate( wxCalendarEvent& event ) { event.Skip(); }
+	void OnSelectDate(wxCalendarEvent&);
 
 	//Intternal model/view
 	std::vector <date> utilized_dates;

@@ -91,7 +91,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnSave ), this, save_menu_item->GetId());
 	add_evt_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
 	otd_activities->Connect(wxEVT_DATAVIEW_SELECTION_CHANGED,wxDataViewEventHandler(MainFrame::OnSelectActivity),NULL,this);
-	date_selector->Connect( wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEventHandler( MainFrame::OnNewDate ), NULL, this );
+	date_selector->Connect( wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEventHandler( MainFrame::OnSelectDate ), NULL, this );
 
 }
 
@@ -100,7 +100,7 @@ MainFrame::~MainFrame(void) {
 	add_evt_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
 	otd_activities->Disconnect(wxEVT_DATAVIEW_SELECTION_CHANGED,wxDataViewEventHandler(MainFrame::OnSelectActivity),NULL,this);
 	edit_event_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
-	date_selector->Disconnect( wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEventHandler( MainFrame::OnNewDate ), NULL, this );
+	date_selector->Disconnect( wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEventHandler( MainFrame::OnSelectDate ), NULL, this );
 
 }
 
@@ -136,9 +136,19 @@ void MainFrame::add_date(wxDateTime haystack){
 }
 
 bool MainFrame::date_exists(wxDateTime comparator){
-	int index=binary_search<date>(utilized_dates,create_date(comparator));
-	if(utilized_dates[index]==comparator)
-		return true;
+	//binary search is meant to give us an insertion point
+	//	consequently, the index is spits out has to be adjusted when searching
+	//	to see if something exists or not
+	if(utilized_dates.size()>1){
+		int index=binary_search<date>(utilized_dates,create_date(comparator));
+		if(index>=utilized_dates.size())
+			return false;
+		if(utilized_dates[index]==comparator)
+			return true;
+	}else if(utilized_dates.size()==1){
+		if(utilized_dates[0]==comparator)
+			return true;
+	}
 	return false;
 }
 
@@ -156,6 +166,7 @@ void MainFrame::OnSave(wxCommandEvent &evt){
 	}
 }
 
+//FIXME activities added here don't persist
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	AddEventDialog *diag=new AddEventDialog(this,tags_cache);
 	if(diag->ShowModal()==wxOK){
@@ -163,6 +174,7 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 		int index=binary_search<date>(utilized_dates,create_date(cd));
 		if(utilized_dates.size()==0){
 			date d(cd);
+			std::cout<<"Adding date "<<d.toStdStr()<<" to the list...."<<std::endl;
 			utilized_dates.push_back(d);
 		}else if(utilized_dates[index]!=create_date(cd)){
 			date d(cd);
@@ -174,11 +186,11 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 
 		ActivityID id_to_add=gen_ac_id(utilized_dates[index].Activities(),diag->get_activity_label());
 		Activity ac_to_add(diag->get_generated_activity(id_to_add));
-		for_each(ac_to_add.Tags().begin(),ac_to_add.Tags().end(),[&](std::string t){
+		for(auto t : ac_to_add.Tags())
 			this->add_to_tags_cache(t);
-		});
 		
 		utilized_dates[index].AddActivity(ac_to_add);
+		std::cout<<"Added activity "<<ac_to_add.ID().str()<<std::endl;
 		DVPair <std::string,float> *to_add=new DVPair<std::string,float>(ac_to_add.Label(),ac_to_add.Hours());
 		activity_model->AddRow(to_add);
 		delete to_add;
@@ -200,6 +212,39 @@ void MainFrame::OnSelectActivity(wxDataViewEvent &evt){
 		throw except;
 	}
 	std::cout<<"Row = "<<selected_row<<std::endl;
+}
+
+void MainFrame::OnSelectDate(wxCalendarEvent &evt){
+	std::vector<DVPair<std::string,float> > acs;
+	if(date_exists(evt.GetDate())){
+		date selected_date(evt.GetDate());
+		std::cout<<"Selected date "<<selected_date.toStdStr()<<" exists!"<<std::endl;
+		int index=binary_search<date>(utilized_dates,create_date(evt.GetDate()));
+		if(index==utilized_dates.size() && utilized_dates.size()!=0){
+			if(utilized_dates[index-1]==evt.GetDate()){
+				for(auto ac : utilized_dates[index-1].Activities()){
+					DVPair<std::string,float> a(ac.Label(),ac.Hours());
+					acs.push_back(a);
+				}
+			}
+		}else if(utilized_dates.size()>index){
+			if(index==0){
+				if(utilized_dates[index]==evt.GetDate()){
+					for(auto ac : utilized_dates[index].Activities()){
+						DVPair<std::string,float> a(ac.Label(),ac.Hours());
+						acs.push_back(a);
+					}
+				}
+			}else if(index>0){
+				for(auto ac : utilized_dates[index].Activities()){
+					DVPair<std::string,float> a(ac.Label(),ac.Hours());
+					acs.push_back(a);
+				}
+			}
+		}
+	}
+	activity_model->Rebuild(acs);
+	Refresh();
 }
 
 //MFException stuff

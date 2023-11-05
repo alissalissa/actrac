@@ -74,6 +74,8 @@ public:
 	bool DeleteRow(const unsigned int);
 	int GetRowByItem(const wxDataViewItem) const;
 
+	void Rebuild(std::vector<DVPair<std::string,float> >);
+
 };
 
 #endif
