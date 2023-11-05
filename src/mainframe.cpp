@@ -219,6 +219,7 @@ void MainFrame::OnSelectDate(wxCalendarEvent &evt){
 		date selected_date(evt.GetDate());
 		std::cout<<"Selected date "<<selected_date.toStdStr()<<" exists!"<<std::endl;
 		int index=binary_search<date>(utilized_dates,create_date(evt.GetDate()));
+		//FIXME this conditional tree does not adequately address all cases
 		if(index==utilized_dates.size() && utilized_dates.size()!=0){
 			if(utilized_dates[index-1]==evt.GetDate()){
 				for(auto ac : utilized_dates[index-1].Activities()){
