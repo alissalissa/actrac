@@ -166,7 +166,6 @@ void MainFrame::OnSave(wxCommandEvent &evt){
 	}
 }
 
-//FIXME activities added here don't persist
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	AddEventDialog *diag=new AddEventDialog(this,tags_cache);
 	if(diag->ShowModal()==wxOK){
