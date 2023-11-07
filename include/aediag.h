@@ -36,6 +36,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class AddEventDialog
 ///////////////////////////////////////////////////////////////////////////////
+//TODO submit button should be disabled until fields are filled
+//TODO add in recurring events
 class AddEventDialog : public wxDialog{
 private:
 
@@ -72,6 +74,9 @@ public:
 	//Accessors
 	Activity get_generated_activity(ActivityID);
 	std::string get_activity_label(void){return ac_label_entry->GetValue().ToStdString();}
+
+	//For editing events
+	void populate(std::string,float,std::vector<std::string>);
 
 };
 

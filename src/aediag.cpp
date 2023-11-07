@@ -41,6 +41,7 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 	edit_tag = new wxMenuItem( tag_entry_context_menu, wxID_ANY, wxString( wxT("Edit Tag") ) , wxEmptyString, wxITEM_NORMAL );
 	tag_entry_context_menu->Append( edit_tag );
 	edit_tag->Enable( false );
+	delete_tag->Enable(false);
 
 	tag_entry->Connect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
 	
@@ -50,19 +51,13 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( AddEventDialog::OnRemoveTag ), this, delete_tag->GetId());
 	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( AddEventDialog::OnEditTag ), this, edit_tag->GetId());
 
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
-
 	ok_btn = new wxButton( this, wxID_ANY, wxT("Submit!"), wxDefaultPosition, wxDefaultSize, 0 );
 
 	ok_btn->SetDefault();
-	bSizer7->Add( ok_btn, 0, wxALL, 5 );
+	fgSizer1->Add( ok_btn, 0, wxALL, 5 );
 
 	cancel_btn = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( cancel_btn, 0, wxALL, 5 );
-
-
-	fgSizer1->Add( bSizer7, 1, wxEXPAND, 5 );
+	fgSizer1->Add( cancel_btn, 0, wxALL, 5 );
 
 
 	this->SetSizer( fgSizer1 );
@@ -101,6 +96,7 @@ void AddEventDialog::OnContextClick(wxContextMenuEvent &event){
 
 void AddEventDialog::OnSelect(wxCommandEvent &event){
 	edit_tag->Enable(true);
+	delete_tag->Enable(true);
 }
 
 void AddEventDialog::OnAddTag( wxCommandEvent& event ){
@@ -131,6 +127,8 @@ void AddEventDialog::OnRemoveTag(wxCommandEvent &event){
 		tag_entry->Delete(selected);
 		this->Refresh();
 	}
+	delete_tag->Enable(false);
+	edit_tag->Enable(false);
 	return;
 }
 
@@ -157,4 +155,17 @@ Activity AddEventDialog::get_generated_activity(ActivityID id_to_add){
 	}
 	Activity ac(id_to_add,get_activity_label(),(ts.size()>0)?ts.data():NULL,static_cast<float>(hour_entry->GetValue()),true,0,-1);
 	return ac;
+}
+
+//Event editing
+void AddEventDialog::populate(std::string label,float hours,std::vector<std::string> tags){
+	wxString wxs_label(label);
+	ac_label_entry->SetValue(wxs_label);
+	hour_entry->SetValue(static_cast<double>(hours));
+	wxArrayString wxs_tags;
+	for(auto t : tags){
+		wxString wxs_tag(t);
+		wxs_tags.Add(wxs_tag);
+	}
+	tag_entry->InsertItems(wxs_tags,0);
 }

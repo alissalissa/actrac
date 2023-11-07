@@ -111,11 +111,15 @@ void MainFrame::add_to_tags_cache(std::string new_entry){
 		tags_cache.push_back(new_entry);
 		return;
 	}else if(tags_cache.size()==1){
-		if(new_entry<tags_cache[0]) tags_cache.insert(tags_cache.begin(),new_entry);
-		else tags_cache.push_back(new_entry);
+		if(new_entry<tags_cache[0])
+			tags_cache.insert(tags_cache.begin(),new_entry);
+		else if(new_entry!=tags_cache[0])
+			tags_cache.push_back(new_entry);
 		return;
 	}else{
 		int insertion_point=binary_search<std::string>(tags_cache,new_entry);
+		if(tags_cache[insertion_point]==new_entry)
+			return;
 		std::vector<std::string>::iterator insert_it=tags_cache.begin();
 		for(int i=1;i<=insertion_point;i++) ++insert_it;
 		tags_cache.insert(insert_it,new_entry);
@@ -167,7 +171,6 @@ void MainFrame::OnSave(wxCommandEvent &evt){
 }
 
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
-	//FIXME subsequent events for the same date are being added to additional erroneous date objects
 	AddEventDialog *diag=new AddEventDialog(this,tags_cache);
 	if(diag->ShowModal()==wxOK){
 		//In order to generate a new activity,
@@ -222,6 +225,9 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 			std::cout<<"caught code "<<e<<std::endl;
 			wxExit();
 		}
+		std::vector<std::string> new_tags=diag->get_generated_activity(new_id).Tags();
+		for(auto nt : new_tags)
+			add_to_tags_cache(nt);
 	}
 	Refresh();
 }
