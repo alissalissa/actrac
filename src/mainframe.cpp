@@ -87,6 +87,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 
 	// Connect Events
 	edit_event_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
+	delete_event_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainFrame::OnRemoveEvent),NULL,this);
 	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnQuit ), this, file_menu_quit->GetId());
 	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnSave ), this, save_menu_item->GetId());
 	add_evt_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
@@ -101,7 +102,7 @@ MainFrame::~MainFrame(void) {
 	otd_activities->Disconnect(wxEVT_DATAVIEW_SELECTION_CHANGED,wxDataViewEventHandler(MainFrame::OnSelectActivity),NULL,this);
 	edit_event_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
 	date_selector->Disconnect( wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEventHandler( MainFrame::OnSelectDate ), NULL, this );
-
+	delete_event_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainFrame::OnRemoveEvent),NULL,this);
 }
 
 //Internal Model
@@ -237,7 +238,33 @@ void MainFrame::OnEditEvent(wxCommandEvent &evt){
 }
 
 void MainFrame::OnRemoveEvent(wxCommandEvent &evt){
-	evt.Skip();
+	try{
+		//Start by getting the date we're on.
+		//	We can assume the date exists, since an activity has to be selected to access this event
+		int date_index=binary_search<date>(utilized_dates,create_date(date_selector->GetDate()));
+		//That should give us an exact date index
+		//Next we need the ID of the activity to delete
+		ActivityID id_to_delete=utilized_dates[date_index].Activities()[selected_row].ID();
+		utilized_dates[date_index].RemoveActivity(id_to_delete);
+		//Now we need to purge from the DV model
+		std::vector<DVPair<std::string,float> > acs;
+		for(auto ac : utilized_dates[date_index].Activities()){
+			DVPair<std::string,float> a(ac.Label(),ac.Hours());
+			acs.push_back(a);
+		}
+		activity_model->Rebuild(acs);
+		//Clear out the selection
+		selected_row=-1;
+		delete_event_btn->Enable(false);
+		edit_event_btn->Enable(false);
+	}catch(std::exception e){
+		std::cout<<e.what()<<std::endl;
+		wxExit();
+	}catch(int e_code){
+		std::cout<<"caught exception code "<<e_code<<std::endl;
+		wxExit();
+	}
+	Refresh();
 }
 
 void MainFrame::OnSelectActivity(wxDataViewEvent &evt){
@@ -247,6 +274,8 @@ void MainFrame::OnSelectActivity(wxDataViewEvent &evt){
 		throw except;
 	}
 	std::cout<<"Row = "<<selected_row<<std::endl;
+	edit_event_btn->Enable(true);
+	delete_event_btn->Enable(true);
 }
 
 void MainFrame::OnSelectDate(wxCalendarEvent &evt){
