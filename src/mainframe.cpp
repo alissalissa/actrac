@@ -53,6 +53,8 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	date_selector = new wxCalendarCtrl( tracker_panel, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxCAL_SHOW_HOLIDAYS );
 	bSizer5->Add( date_selector, 0, wxALL|wxALIGN_RIGHT, 5 );
 
+	today_button = new wxButton( tracker_panel, wxID_ANY, wxT("Today!"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer5->Add( today_button, 0, wxALIGN_RIGHT|wxALL, 5 );
 
 	bSizer2->Add( bSizer5, 1, wxEXPAND, 5 );
 
@@ -93,7 +95,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	add_evt_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
 	otd_activities->Connect(wxEVT_DATAVIEW_SELECTION_CHANGED,wxDataViewEventHandler(MainFrame::OnSelectActivity),NULL,this);
 	date_selector->Connect( wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEventHandler( MainFrame::OnSelectDate ), NULL, this );
-
+	today_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToday ), NULL, this );
 }
 
 MainFrame::~MainFrame(void) {
@@ -103,6 +105,7 @@ MainFrame::~MainFrame(void) {
 	edit_event_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
 	date_selector->Disconnect( wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEventHandler( MainFrame::OnSelectDate ), NULL, this );
 	delete_event_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainFrame::OnRemoveEvent),NULL,this);
+	today_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToday ), NULL, this );
 }
 
 //Internal Model
@@ -276,6 +279,49 @@ void MainFrame::OnSelectActivity(wxDataViewEvent &evt){
 	std::cout<<"Row = "<<selected_row<<std::endl;
 	edit_event_btn->Enable(true);
 	delete_event_btn->Enable(true);
+}
+
+void MainFrame::OnToday(wxCommandEvent &evt){
+	//First, get today's date
+	wxDateTime wx_today(time(NULL));
+	//Debug code
+	std::cout<<"Today's date is "<<create_date(wx_today).toStdStr()<<std::endl;
+	//Is this today's date?
+	date selected_date(date_selector->GetDate());
+	if(selected_date!=create_date(wx_today)){
+		//The selected date is NOT today's date
+		std::vector<DVPair<std::string,float> > acs;
+		if(date_exists(wx_today)){
+			date todays_date(wx_today);
+			std::cout<<"Selected date "<<selected_date.toStdStr()<<" exists!"<<std::endl;
+			int index=binary_search<date>(utilized_dates,todays_date);
+			if(index==utilized_dates.size() && utilized_dates.size()!=0){
+				if(utilized_dates[index-1]==todays_date){
+					for(auto ac : utilized_dates[index-1].Activities()){
+						DVPair<std::string,float> a(ac.Label(),ac.Hours());
+						acs.push_back(a);
+					}
+				}
+			}else if(utilized_dates.size()>index){
+				if(index==0){
+					if(utilized_dates[index]==todays_date){
+						for(auto ac : utilized_dates[index].Activities()){
+							DVPair<std::string,float> a(ac.Label(),ac.Hours());
+							acs.push_back(a);
+						}
+					}
+				}else if(index>0){
+					for(auto ac : utilized_dates[index].Activities()){
+						DVPair<std::string,float> a(ac.Label(),ac.Hours());
+						acs.push_back(a);
+					}
+				}
+			}
+		}
+		activity_model->Rebuild(acs);
+		date_selector->SetDate(wx_today);
+		Refresh();
+	}
 }
 
 void MainFrame::OnSelectDate(wxCalendarEvent &evt){

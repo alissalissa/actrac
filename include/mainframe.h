@@ -2,6 +2,7 @@
 #define __ACTRAC_MAINFRAME_H__
 
 //#include <algorithm>
+#include <ctime>
 #include <exception>
 #include <iostream>
 #include <string>
@@ -60,12 +61,12 @@ private:
 	wxButton* delete_event_btn;
 	wxButton* edit_event_btn;
 	wxCalendarCtrl* date_selector;
+	wxButton *today_button;
 	wxPanel* report_panel;
 	wxMenuBar* menu_bar;
 	wxMenu* file_menu;
 	DVModel *activity_model;
 
-	//virtual void OnEditEvent( wxCommandEvent& event ) { event.Skip(); }
 	void OnQuit( wxCommandEvent& );
 	void OnAddEvent(wxCommandEvent&);
 	void OnEditEvent(wxCommandEvent&);
@@ -73,6 +74,7 @@ private:
 	void OnSave(wxCommandEvent&);
 	void OnSelectActivity(wxDataViewEvent&);
 	void OnSelectDate(wxCalendarEvent&);
+	void OnToday(wxCommandEvent&);
 
 	//Intternal model/view
 	std::vector <date> utilized_dates;
