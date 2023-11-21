@@ -86,6 +86,8 @@ private:
 	void add_date(wxDateTime);
 	bool date_exists(wxDateTime);
 
+	std::vector<Activity> activities_from_selected_date(wxDateTime);
+
 public:
 
 	MainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1000,700 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL|wxVSCROLL );

@@ -238,6 +238,7 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 
 void MainFrame::OnEditEvent(wxCommandEvent &evt){
 	std::cout<<"Edit event!"<<std::endl;
+	//Get the list of activities foor the selected date
 }
 
 void MainFrame::OnRemoveEvent(wxCommandEvent &evt){
@@ -282,79 +283,55 @@ void MainFrame::OnSelectActivity(wxDataViewEvent &evt){
 }
 
 void MainFrame::OnToday(wxCommandEvent &evt){
-	//First, get today's date
+	std::vector<DVPair<std::string,float> > acs;
 	wxDateTime wx_today(time(NULL));
-	//Debug code
-	std::cout<<"Today's date is "<<create_date(wx_today).toStdStr()<<std::endl;
-	//Is this today's date?
-	date selected_date(date_selector->GetDate());
-	if(selected_date!=create_date(wx_today)){
-		//The selected date is NOT today's date
-		std::vector<DVPair<std::string,float> > acs;
-		if(date_exists(wx_today)){
-			date todays_date(wx_today);
-			std::cout<<"Selected date "<<selected_date.toStdStr()<<" exists!"<<std::endl;
-			int index=binary_search<date>(utilized_dates,todays_date);
-			if(index==utilized_dates.size() && utilized_dates.size()!=0){
-				if(utilized_dates[index-1]==todays_date){
-					for(auto ac : utilized_dates[index-1].Activities()){
-						DVPair<std::string,float> a(ac.Label(),ac.Hours());
-						acs.push_back(a);
-					}
-				}
-			}else if(utilized_dates.size()>index){
-				if(index==0){
-					if(utilized_dates[index]==todays_date){
-						for(auto ac : utilized_dates[index].Activities()){
-							DVPair<std::string,float> a(ac.Label(),ac.Hours());
-							acs.push_back(a);
-						}
-					}
-				}else if(index>0){
-					for(auto ac : utilized_dates[index].Activities()){
-						DVPair<std::string,float> a(ac.Label(),ac.Hours());
-						acs.push_back(a);
-					}
-				}
-			}
-		}
-		activity_model->Rebuild(acs);
-		date_selector->SetDate(wx_today);
-		Refresh();
+	std::vector<Activity> selected_date_activities=this->activities_from_selected_date(wx_today);
+	for(auto activity : selected_date_activities){
+		DVPair <std::string,float> p(activity.Label(),activity.Hours());
+		acs.push_back(p);
 	}
+	activity_model->Rebuild(acs);
+	Refresh();
 }
 
 void MainFrame::OnSelectDate(wxCalendarEvent &evt){
 	std::vector<DVPair<std::string,float> > acs;
-	if(date_exists(evt.GetDate())){
-		date selected_date(evt.GetDate());
-		std::cout<<"Selected date "<<selected_date.toStdStr()<<" exists!"<<std::endl;
-		int index=binary_search<date>(utilized_dates,create_date(evt.GetDate()));
-		if(index==utilized_dates.size() && utilized_dates.size()!=0){
-			if(utilized_dates[index-1]==evt.GetDate()){
-				for(auto ac : utilized_dates[index-1].Activities()){
-					DVPair<std::string,float> a(ac.Label(),ac.Hours());
-					acs.push_back(a);
-				}
-			}
-		}else if(utilized_dates.size()>index){
-			if(index==0){
-				if(utilized_dates[index]==evt.GetDate()){
-					for(auto ac : utilized_dates[index].Activities()){
-						DVPair<std::string,float> a(ac.Label(),ac.Hours());
-						acs.push_back(a);
-					}
-				}
-			}else if(index>0){
-				for(auto ac : utilized_dates[index].Activities()){
-					DVPair<std::string,float> a(ac.Label(),ac.Hours());
-					acs.push_back(a);
-				}
-			}
-		}
+	std::vector<Activity> selected_date_activities=this->activities_from_selected_date(evt.GetDate());
+	for(auto activity : selected_date_activities){
+		DVPair <std::string,float> p(activity.Label(),activity.Hours());
+		acs.push_back(p);
 	}
 	activity_model->Rebuild(acs);
 	Refresh();
+}
+
+std::vector<Activity> MainFrame::activities_from_selected_date(wxDateTime wx_selected){
+	date selected(wx_selected);
+	std::vector<Activity> ret;
+	try{
+		if(utilized_dates.empty())
+			return ret;
+		//We know there's at least one date
+		int date_match_index=binary_search<date>(utilized_dates,selected);
+		if(date_match_index==utilized_dates.size()){
+			//We know the date doesn't exist, since the search is punting to the end of the vector
+			return ret;
+		}
+		if(utilized_dates[date_match_index]!=selected){
+			//The date doesn't exist
+			return ret;
+		}
+		//The date exists, and we've selected it
+		for(auto ac : utilized_dates[date_match_index].Activities())
+			ret.push_back(ac);
+	}catch(std::exception e){
+		std::cout<<e.what()<<std::endl;
+		wxExit();
+	}catch(int e_code){
+		std::cout<<"Caught error code "<<e_code<<std::endl;
+		wxExit();
+	}
+	return ret;
 }
 
 //MFException stuff
