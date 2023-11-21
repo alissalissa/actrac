@@ -31,7 +31,7 @@ bool DVModel::SetValueByRow(const wxVariant &haystack,unsigned int row,unsigned 
 
 bool DVModel::AddRow(const DVPair<std::string,float> *haystack){
 	try{
-		//FIXME this can be more efficient with a binary search instead of resorting every time
+		//We can't use a binary search because that's implemented up the source tree in mainframe
 		data.push_back(*haystack);
 		std::sort(data.begin(),data.end());
 		Reset(data.size());

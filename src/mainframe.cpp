@@ -236,9 +236,35 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	Refresh();
 }
 
+//FIXME assertion fails if editing an activity with no tags
+//FIXME Segfault when re-accessing an edited activity after switching dates
 void MainFrame::OnEditEvent(wxCommandEvent &evt){
-	std::cout<<"Edit event!"<<std::endl;
-	//Get the list of activities foor the selected date
+	//std::cout<<"Edit event!"<<std::endl;
+	//Get the list of activities for the selected date
+	std::vector<Activity> current_activities=this->activities_from_selected_date(date_selector->GetDate());
+	Activity current_activity=current_activities[selected_row];
+	AddEventDialog *diag=new AddEventDialog(this,tags_cache);
+	diag->populate(current_activity.Label(),current_activity.Hours(),current_activity.Tags());
+	if(diag->ShowModal()==wxOK){
+		std::cout<<"Updating activity to be written...."<<std::endl;
+		//Okay, so we need to update the current event
+		ActivityID new_id=gen_ac_id(current_activities,diag->get_activity_label());
+		current_activities[selected_row]=diag->get_generated_activity(new_id);
+		std::vector<DVPair<std::string,float> > new_model_context;
+		for(auto ac : current_activities){
+			DVPair<std::string,float> *p=new DVPair<std::string,float>(ac.Label(),ac.Hours());
+			new_model_context.push_back(*p);
+			delete p;
+		}
+		activity_model->Rebuild(new_model_context);
+		//The display model has been rebuilt, now update the vector of Activities
+		//We know the date has to exist, and we know it has to be populated
+		//	We know this because a date and activity were selected to get to this point
+		int match_index=binary_search<date>(utilized_dates,create_date(date_selector->GetDate()));
+		utilized_dates[match_index].Activities()=current_activities;
+		Refresh();
+	}
+	delete diag;
 }
 
 void MainFrame::OnRemoveEvent(wxCommandEvent &evt){
