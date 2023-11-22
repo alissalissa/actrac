@@ -317,6 +317,7 @@ void MainFrame::OnToday(wxCommandEvent &evt){
 		acs.push_back(p);
 	}
 	activity_model->Rebuild(acs);
+	date_selector->SetDate(wx_today);
 	Refresh();
 }
 
