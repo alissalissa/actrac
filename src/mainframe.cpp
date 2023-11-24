@@ -236,7 +236,6 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 	Refresh();
 }
 
-//FIXME Segfault when re-accessing an edited activity after switching dates
 void MainFrame::OnEditEvent(wxCommandEvent &evt){
 	//std::cout<<"Edit event!"<<std::endl;
 	//Get the list of activities for the selected date
