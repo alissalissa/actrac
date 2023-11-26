@@ -72,6 +72,7 @@ private:
 	void OnEditEvent(wxCommandEvent&);
 	void OnRemoveEvent(wxCommandEvent &evt);
 	void OnSave(wxCommandEvent&);
+	void OnLoad(wxCommandEvent&);
 	void OnSelectActivity(wxDataViewEvent&);
 	void OnSelectDate(wxCalendarEvent&);
 	void OnToday(wxCommandEvent&);
