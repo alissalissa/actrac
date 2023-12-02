@@ -174,10 +174,19 @@ void MainFrame::OnSave(wxCommandEvent &evt){
 }
 
 void MainFrame::OnLoad(wxCommandEvent &evt){
+	//FIXME .dat files aren't being recognized by this dialog
 	wxFileDialog *selector_diag=new wxFileDialog(this,wxT("Load events from file"),wxT(""),wxT(""),wxT(".dat"),wxFD_OPEN);
 	if(selector_diag->ShowModal()==wxID_OK){
 		std::cout<<"Loading events from "<<selector_diag->GetPath().ToStdString()<<std::endl;
+		utilized_dates.clear();
+		tags_cache.clear();
+		if(!read_from_file(selector_diag->GetPath().ToStdString(),utilized_dates,tags_cache)){
+			std::cout<<"Error reading activity file!"<<std::endl;
+			delete selector_diag;
+			throw MFException();
+		}
 	}
+	delete selector_diag;
 }
 
 void MainFrame::OnAddEvent(wxCommandEvent &evt){
