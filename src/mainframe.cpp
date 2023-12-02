@@ -68,23 +68,21 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 
 	main_sizer->Add( view_selector, 1, wxEXPAND | wxALL, 5 );
 
-
 	this->SetSizer( main_sizer );
 	this->Layout();
 	menu_bar = new wxMenuBar( 0 );
 	file_menu = new wxMenu();
 	wxMenuItem* save_menu_item = new wxMenuItem( file_menu, wxID_ANY, wxString( wxT("Save") ) + wxT('\t') + wxT("CTRL-s"), wxEmptyString, wxITEM_NORMAL );
 	file_menu->Append( save_menu_item );
+	wxMenuItem* load_menu_item = new wxMenuItem( file_menu, wxID_ANY, wxString( wxT("Load From File") ) + wxT('\t') + wxT("ctrl-o"), wxEmptyString, wxITEM_NORMAL );
+	file_menu->Append( load_menu_item );
 	wxMenuItem* file_menu_quit = new wxMenuItem( file_menu, wxID_ANY, wxString( wxT("Quit") ) , wxEmptyString, wxITEM_NORMAL );
 	file_menu->Append( file_menu_quit );
 
 	menu_bar->Append( file_menu, wxT("File") );
 
 	this->SetMenuBar( menu_bar );
-
-
 	this->Centre( wxBOTH );
-
 	selected_row=-1;
 
 	// Connect Events
@@ -92,6 +90,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	delete_event_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainFrame::OnRemoveEvent),NULL,this);
 	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnQuit ), this, file_menu_quit->GetId());
 	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnSave ), this, save_menu_item->GetId());
+	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnLoad ), this, load_menu_item->GetId());
 	add_evt_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
 	otd_activities->Connect(wxEVT_DATAVIEW_SELECTION_CHANGED,wxDataViewEventHandler(MainFrame::OnSelectActivity),NULL,this);
 	date_selector->Connect( wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEventHandler( MainFrame::OnSelectDate ), NULL, this );
@@ -171,6 +170,13 @@ void MainFrame::OnSave(wxCommandEvent &evt){
 		std::cout<<selector_diag.GetPath().ToStdString()<<std::endl;
 		if(!write_to_file(selector_diag.GetPath().ToStdString(),this->utilized_dates,tags_cache))
 			std::cout<<"Error writing file..."<<std::endl;
+	}
+}
+
+void MainFrame::OnLoad(wxCommandEvent &evt){
+	wxFileDialog *selector_diag=new wxFileDialog(this,wxT("Load events from file"),wxT(""),wxT(""),wxT(".dat"),wxFD_OPEN);
+	if(selector_diag->ShowModal()==wxID_OK){
+		std::cout<<"Loading events from "<<selector_diag->GetPath().ToStdString()<<std::endl;
 	}
 }
 
