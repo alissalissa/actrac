@@ -162,10 +162,12 @@ void AddEventDialog::populate(std::string label,float hours,std::vector<std::str
 	wxString wxs_label(label);
 	ac_label_entry->SetValue(wxs_label);
 	hour_entry->SetValue(static_cast<double>(hours));
-	wxArrayString wxs_tags;
-	for(auto t : tags){
-		wxString wxs_tag(t);
-		wxs_tags.Add(wxs_tag);
+	if(!tags.empty()){
+		wxArrayString wxs_tags;
+		for(auto t : tags){
+			wxString wxs_tag(t);
+			wxs_tags.Add(wxs_tag);
+		}
+		tag_entry->InsertItems(wxs_tags,0);
 	}
-	tag_entry->InsertItems(wxs_tags,0);
 }
