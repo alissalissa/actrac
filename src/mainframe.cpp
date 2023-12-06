@@ -165,7 +165,7 @@ void MainFrame::OnQuit(wxCommandEvent &evt){
 }
 
 void MainFrame::OnSave(wxCommandEvent &evt){
-	wxFileDialog selector_diag(this,wxT("Save events to file"),wxT(""),wxT(""),wxT(".dat"),wxFD_SAVE);
+	wxFileDialog selector_diag(this,wxT("Save events to file"),wxT(""),wxT(""),wxT("*.dat"),wxFD_SAVE);
 	if(selector_diag.ShowModal()==wxID_OK){
 		std::cout<<selector_diag.GetPath().ToStdString()<<std::endl;
 		if(!write_to_file(selector_diag.GetPath().ToStdString(),this->utilized_dates,tags_cache))
@@ -174,8 +174,7 @@ void MainFrame::OnSave(wxCommandEvent &evt){
 }
 
 void MainFrame::OnLoad(wxCommandEvent &evt){
-	//FIXME .dat files aren't being recognized by this dialog
-	wxFileDialog *selector_diag=new wxFileDialog(this,wxT("Load events from file"),wxT(""),wxT(""),wxT(".dat"),wxFD_OPEN);
+	wxFileDialog *selector_diag=new wxFileDialog(this,wxT("Load events from file"),wxT(""),wxT(""),wxT("*.dat"),wxFD_OPEN);
 	if(selector_diag->ShowModal()==wxID_OK){
 		std::cout<<"Loading events from "<<selector_diag->GetPath().ToStdString()<<std::endl;
 		utilized_dates.clear();
