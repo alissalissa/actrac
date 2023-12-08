@@ -1,14 +1,14 @@
 #include "serialize.h"
 
 bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std::string> tags){
-	std::ofstream output(filename.c_str(),std::ios_base::out | std::ios_base::binary);
+	std::fstream output(filename.c_str(),std::ios_base::out | std::ios_base::binary);
 	if(!output.is_open()){
 		std::cout<<"Unable to open file for writing...."<<std::endl;
 		return false;
 	}
 	//Write the magic number to get started
 	try{
-		output.write(&ACSERIALIZE_MAGIC_NUMBER,sizeof(char));
+		output.put(ACSERIALIZE_MAGIC_NUMBER);
 		//Calculate the size of the next section
 		//	We start with the number of tag seperators, INCLUDING the end of section magic number
 		int32_t tag_section_size=tags.size();
@@ -62,7 +62,7 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 		std::ostringstream date_info_length;
 		date_info_length<<date_info_buffer.length()<<date_info_buffer;
 		output.write(date_info_length.str().c_str(),date_info_length.str().length());
-		output.write(&ACSERIALIZE_MAGIC_NUMBER,sizeof(char));
+		output.put(ACSERIALIZE_MAGIC_NUMBER);
 	}catch(std::exception e){
 		std::cout<<e.what()<<std::endl;
 		output.close();
@@ -78,7 +78,9 @@ bool read_from_file(std::string filename,std::vector<date> &dates,std::vector<st
 	if(!handle.is_open())
 		return false;
 	try{
-		if(handle.get()!=ACSERIALIZE_MAGIC_NUMBER){
+		char first_byte='\0';
+		handle.get(first_byte);
+		if(first_byte!=ACSERIALIZE_MAGIC_NUMBER){
 			std::cout<<"File corrupted!"<<std::endl;
 			handle.close();
 			return false;

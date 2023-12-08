@@ -179,6 +179,7 @@ void MainFrame::OnLoad(wxCommandEvent &evt){
 		std::cout<<"Loading events from "<<selector_diag->GetPath().ToStdString()<<std::endl;
 		utilized_dates.clear();
 		tags_cache.clear();
+		//FIXME unhandled exception is occurring
 		if(!read_from_file(selector_diag->GetPath().ToStdString(),utilized_dates,tags_cache)){
 			std::cout<<"Error reading activity file!"<<std::endl;
 			delete selector_diag;
