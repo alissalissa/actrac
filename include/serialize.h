@@ -16,7 +16,7 @@
 
 const char ACSERIALIZE_MAGIC_NUMBER=0xEE;
 
-class sfexception : std::exception {
+class sfexception : public std::exception {
 private:
 	std::string message;
 public:

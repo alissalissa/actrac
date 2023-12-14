@@ -19,8 +19,8 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 		output.write(reinterpret_cast<char*>(&tag_section_size),sizeof(int32_t));
 		for(auto tag : tags){
 			output.write(tag.c_str(),tag.length());
-			const int32_t seperator=(tag==tags[tags.size()-1])?0x0d:0x0a;
-			output.write(reinterpret_cast<const char*>(&seperator),sizeof(int32_t));
+			const char seperator=(tag==tags[tags.size()-1])?0x0d:0x0a;
+			output.put(seperator);
 		}
 
 		//Create a string to encapsulate the date section
@@ -52,16 +52,15 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 				date_info<<ac.Recurences();
 				date_info<<0x0e;
 				date_info<<ac.RecurrenceFrequency();
-				if(ac!=(*d.Activities().end()))
+				if(ac!=d.Activities()[d.Activities().size()-1])
 					date_info<<0x0c;
 			}
 			if(d!=dates[dates.size()-1])
 				date_info<<0x0d;
-		};
-		std::string date_info_buffer=date_info.str();
-		std::ostringstream date_info_length;
-		date_info_length<<date_info_buffer.length()<<date_info_buffer;
-		output.write(date_info_length.str().c_str(),date_info_length.str().length());
+		}
+		size_t date_info_length=date_info.str().length();
+		output.write(reinterpret_cast<char*>(&date_info_length),sizeof(size_t));
+		output.write(date_info.str().c_str(),date_info_length);
 		output.put(ACSERIALIZE_MAGIC_NUMBER);
 	}catch(std::exception e){
 		std::cout<<e.what()<<std::endl;
@@ -100,10 +99,9 @@ bool read_from_file(std::string filename,std::vector<date> &dates,std::vector<st
 			return false;
 		}
 		tags_cache_buffer[tcb_end]=tags_cache_buffer[tcb_end].substr(0,tags_cache_buffer[tcb_end].length()-1);
-		for_each(tags_cache_buffer.begin(),tags_cache_buffer.end(),[&](std::string tag){
+		for(auto tag : tags_cache_buffer)
 			tags_cache.push_back(tag);
-		});
-
+		
 		//Get the stream of date info
 		int32_t date_section_size=0;
 		handle.read(reinterpret_cast<char*>(&date_section_size),sizeof(int32_t));
@@ -117,26 +115,30 @@ bool read_from_file(std::string filename,std::vector<date> &dates,std::vector<st
 			std::vector<std::string> date_streams=split_str(date_section_stream,0x0d);
 
 			//Process each date stream
-			for_each(date_streams.begin(),date_streams.end(),[&](std::string ds){
+			for(auto ds : date_streams){
 				if(ds.find(0x0c)==std::string::npos){
+					std::cout<<"throw 4"<<std::endl;
 					sfexception ex;
 					throw ex;
 				}
 
 				std::string date_string=ds.substr(0,ds.find(0x0c));
 				std::vector<std::string> date_fields=split_str(date_string,'/');
+				//FIXME this is where the exception is coming from
 				date d(std::stoi(date_fields[1]),static_cast<month_t>(std::stoi(date_fields[0])),std::stoi(date_fields[2]));
 				std::vector<std::string> activities=split_str(ds,0x0c);
 				if(activities[0][0]!=0x0c || activities[0].length()!=1){
+					std::cout<<"throw 0"<<std::endl;
 					sfexception ex;
 					throw ex;
 				}
 
 				activities.erase(activities.begin());
 				std::vector<Activity> acs;
-				for_each(activities.begin(),activities.end(),[&](std::string ac_stream){
+				for(auto ac_stream : activities){
 					std::vector<std::string> fields=split_str(ac_stream,0x0e);
 					if(fields.size()!=8){ //The number of expected fields
+						std::cout<<"throw 1"<<std::endl;
 						sfexception sf;
 						throw sf;
 					}
@@ -148,11 +150,14 @@ bool read_from_file(std::string filename,std::vector<date> &dates,std::vector<st
 					ActivityID id(std::stoi(fields[0]),fields[1]);
 					Activity ac(id,fields[2],tag_fields,std::stof(fields[4]),std::stoi(fields[5]),std::stoi(fields[6]),std::stoi(fields[7]));
 					d.AddActivity(ac);
-				});
+				}
 				dates.push_back(d);
-			});
+			}
 		}
-		if(handle.get()!=ACSERIALIZE_MAGIC_NUMBER){
+		char final_byte='\0';
+		handle.get(final_byte);
+		if(final_byte!=ACSERIALIZE_MAGIC_NUMBER){
+			std::cout<<"throw 2"<<std::endl;
 			sfexception ex;
 			throw ex;
 		}
