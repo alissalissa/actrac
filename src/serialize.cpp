@@ -23,44 +23,34 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 			output.put(seperator);
 		}
 
-		//Create a string to encapsulate the date section
-		//	The length of the section will be prepended after
-		std::ostringstream date_info;
+		//Date Section
+		const size_t number_of_dates=dates.size();
+		output.write(reinterpret_cast<const char*>(&number_of_dates),sizeof(size_t));
 		for(auto d : dates){
-			date_info<<d.toStdStr("%mm%dd%yyyy");
+			output.write(d.toStdStr("%mm%dd%yyyy").c_str(),d.toStdStr("%mm%dd%yyyy").length());
 			for(auto ac : d.Activities()){
-				date_info<<(char)0x0c;
-				date_info<<ac.ID().Index();
-				date_info<<(char)0x0e;
-				date_info<<ac.ID().Label();
-				date_info<<(char)0x0e;
-				date_info<<ac.Tags().size();
-				date_info<<0x0e;
-				for(auto t : ac.Tags()){
-					date_info<<t;
-					if(t!=ac.Tags()[ac.Tags().size()-1])
-						date_info<<0x0b;
+				output.put(0x0c);
+				const int index=ac.ID().Index();
+				output.write(reinterpret_cast<const char*>(&index),sizeof(int));
+				output.write(ac.Label().c_str(),ac.Label().length());
+				const size_t n_of_tags=ac.Tags().size();
+				output.write(reinterpret_cast<const char*>(&n_of_tags),sizeof(size_t));
+				for(auto tag : ac.Tags()){
+					output.write(tag.c_str(),tag.length());
+					output.put(0x0b);
 				}
-				date_info<<0x0e;
-				date_info<<ac.Hours();
-				date_info<<0x0e;
-				if(ac.is_confirmed())
-					date_info<<0x01;
-				else
-					date_info<<0x00;
-				date_info<<0x0e;
-				date_info<<ac.Recurences();
-				date_info<<0x0e;
-				date_info<<ac.RecurrenceFrequency();
+				output.write(reinterpret_cast<char*>(&ac.Hours()),sizeof(float));
+				output.put((ac.is_confirmed())?0x01:0x00);
+				//recurrences
+				output.write(reinterpret_cast<char*>(&ac.Recurences()),sizeof(int));
+				output.write(reinterpret_cast<char*>(&ac.RecurrenceFrequency()),sizeof(int));
+				//Ending byte
 				if(ac!=d.Activities()[d.Activities().size()-1])
-					date_info<<0x0c;
+					output.put(0x0c);
 			}
 			if(d!=dates[dates.size()-1])
-				date_info<<0x0d;
+				output.put(0x0d);
 		}
-		size_t date_info_length=date_info.str().length();
-		output.write(reinterpret_cast<char*>(&date_info_length),sizeof(size_t));
-		output.write(date_info.str().c_str(),date_info_length);
 		output.put(ACSERIALIZE_MAGIC_NUMBER);
 	}catch(std::exception e){
 		std::cout<<e.what()<<std::endl;
