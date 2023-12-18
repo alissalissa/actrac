@@ -14,13 +14,14 @@ This section is comprised of the length in bytes (a series of chars) of the enti
 What follows is the number of dates in the date record section, written as an int32_t.  Thence:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;1) The date, formatted as MM/DD/YYYY, followed by the information for the activities from that date.  The activity information is formatted as an indicator (0x0c), followed by:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a) ID<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) Label<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c) The number of tags associated with this activity written as a size_t<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d) Each tag, followed by 0x0b<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e) The number of hours as a float<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f) a single byte, 0x01 for confirmed activity, 0x00 for an unconfirmed activity<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g) an int32 indicating the number of recurrences<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h) an int32 indicating the number of days over which an activity should repeat<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) The length of the label<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c) Label<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d) The number of tags associated with this activity written as a size_t<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e) Each tag, followed by 0x0b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f) The number of hours as a float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g) a single byte, 0x01 for confirmed activity, 0x00 for an unconfirmed activity<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h) an int32 indicating the number of recurrences<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i) an int32 indicating the number of days over which an activity should repeat<br>
 &nbsp;&nbsp;&nbsp;&nbsp;2) Each activity is seperated by an indicator (0x0c)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;3) Each date is separated by an indicator (0x0d)<br>
 

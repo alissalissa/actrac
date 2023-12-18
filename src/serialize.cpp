@@ -32,6 +32,8 @@ bool write_to_file(std::string filename,std::vector<date> dates,std::vector<std:
 				output.put(0x0c);
 				const int index=ac.ID().Index();
 				output.write(reinterpret_cast<const char*>(&index),sizeof(int));
+				size_t lab_length=ac.Label().length();
+				output.write(reinterpret_cast<char*>(&lab_length),sizeof(size_t));
 				output.write(ac.Label().c_str(),ac.Label().length());
 				const size_t n_of_tags=ac.Tags().size();
 				output.write(reinterpret_cast<const char*>(&n_of_tags),sizeof(size_t));
@@ -93,63 +95,76 @@ bool read_from_file(std::string filename,std::vector<date> &dates,std::vector<st
 			tags_cache.push_back(tag);
 		
 		//Get the stream of date info
-		int32_t date_section_size=0;
-		handle.read(reinterpret_cast<char*>(&date_section_size),sizeof(int32_t));
+		size_t date_section_size=0;
+		handle.read(reinterpret_cast<char*>(&date_section_size),sizeof(size_t));
+		for(size_t i=0;i<date_section_size;i++){
+			//First we read in the date
+			char *date_string_buffer=(char*)calloc(11,sizeof(char));
+			handle.read(date_string_buffer,10);
+			date_string_buffer[10]='\0';
+			std::string date_string(date_string_buffer);
+			free(date_string_buffer);
+			std::vector<std::string> date_fields=split_str(date_string,'/');
+			if(date_fields.size()!=3)
+				throw sfexception();
+			date date_buffer(std::stoi(date_fields[1]),static_cast<month_t>(std::stoi(date_fields[0])),std::stoi(date_fields[2]));
+			
+			//Next we read all the activities into this date object
+			char placeholder='\0';
+			handle.get(placeholder);
+			while(placeholder==0x0c){
+				int idn=-1;
+				handle.read(reinterpret_cast<char*>(&idn),sizeof(int));
 
-		if(date_section_size>0){
-			char *date_section_buffer=(char*)calloc(date_section_size+1,sizeof(char));
-			handle.read(date_section_buffer,date_section_size);
-			date_section_buffer[date_section_size]='\0';
-			std::string date_section_stream(date_section_buffer);
-			//Get the actual date streams
-			std::vector<std::string> date_streams=split_str(date_section_stream,0x0d);
+				size_t label_length=-1;
+				handle.read(reinterpret_cast<char*>(&label_length),sizeof(size_t));
+				char *label_buffer=static_cast<char*>(calloc(label_length+1,sizeof(char)));
+				handle.read(label_buffer,label_length);
+				label_buffer[label_length]='\0';
+				std::string label(label_buffer);
+				free(label_buffer);
 
-			//Process each date stream
-			for(auto ds : date_streams){
-				if(ds.find(0x0c)==std::string::npos){
-					std::cout<<"throw 4"<<std::endl;
-					sfexception ex;
-					throw ex;
-				}
-
-				std::string date_string=ds.substr(0,ds.find(0x0c));
-				std::vector<std::string> date_fields=split_str(date_string,'/');
-				//FIXME this is where the exception is coming from
-				date d(std::stoi(date_fields[1]),static_cast<month_t>(std::stoi(date_fields[0])),std::stoi(date_fields[2]));
-				std::vector<std::string> activities=split_str(ds,0x0c);
-				if(activities[0][0]!=0x0c || activities[0].length()!=1){
-					std::cout<<"throw 0"<<std::endl;
-					sfexception ex;
-					throw ex;
-				}
-
-				activities.erase(activities.begin());
-				std::vector<Activity> acs;
-				for(auto ac_stream : activities){
-					std::vector<std::string> fields=split_str(ac_stream,0x0e);
-					if(fields.size()!=8){ //The number of expected fields
-						std::cout<<"throw 1"<<std::endl;
-						sfexception sf;
-						throw sf;
+				size_t n_of_tags=-1;
+				handle.read(reinterpret_cast<char*>(&n_of_tags),sizeof(size_t));
+				std::vector<std::string> ac_tags;
+				for(size_t j=0;j<n_of_tags;j++){
+					std::string t="";
+					char b='\0';
+					handle.get(b);
+					while(b!=0x0b){
+						t+=b;
+						handle.get(b);
 					}
-					std::vector<std::string> tag_fields_buffer=split_str(fields[3],0x0b);
-					std::string tag_fields[tag_fields_buffer.size()+1];
-					for(int i=0;i<tag_fields_buffer.size();i++)
-						tag_fields[i]=tag_fields_buffer[i];
-					tag_fields[tag_fields_buffer.size()]="\0";
-					ActivityID id(std::stoi(fields[0]),fields[1]);
-					Activity ac(id,fields[2],tag_fields,std::stof(fields[4]),std::stoi(fields[5]),std::stoi(fields[6]),std::stoi(fields[7]));
-					d.AddActivity(ac);
+					ac_tags.push_back(t);
 				}
-				dates.push_back(d);
+
+				float hours=0.0;
+				handle.read(reinterpret_cast<char*>(&hours),sizeof(float));
+
+				char confirmed_buffer=0x00;
+				handle.get(confirmed_buffer);
+				bool confirmed=(confirmed_buffer)?true:false;
+
+				int32_t recurrences=0;
+				handle.read(reinterpret_cast<char*>(&recurrences),sizeof(int32_t));
+				int32_t recurrence_frq=0;
+				handle.read(reinterpret_cast<char*>(&recurrence_frq),sizeof(int32_t));
+				
+				ActivityID new_id(idn,label);
+				if(ac_tags.size()>0)
+					ac_tags.push_back("\0");
+				Activity ac(new_id,label,ac_tags.data(),hours,confirmed,recurrences,recurrence_frq);
+				date_buffer.AddActivity(ac);
+
+				handle.get(placeholder);
 			}
-		}
-		char final_byte='\0';
-		handle.get(final_byte);
-		if(final_byte!=ACSERIALIZE_MAGIC_NUMBER){
-			std::cout<<"throw 2"<<std::endl;
-			sfexception ex;
-			throw ex;
+			dates.push_back(date_buffer);
+			//TODO what do we do to cleanup after we add the dates?
+			//	Are there formatting checks we should be making against the file here?
+			if(i<date_section_size-1 && placeholder!=0x0d)
+				throw sfexception();
+			if(i==date_section_size-1 && placeholder!=ACSERIALIZE_MAGIC_NUMBER)
+				throw sfexception();
 		}
 	}catch(std::exception e){
 		std::cout<<e.what()<<std::endl;
