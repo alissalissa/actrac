@@ -159,8 +159,6 @@ bool read_from_file(std::string filename,std::vector<date> &dates,std::vector<st
 				handle.get(placeholder);
 			}
 			dates.push_back(date_buffer);
-			//TODO what do we do to cleanup after we add the dates?
-			//	Are there formatting checks we should be making against the file here?
 			if(i<date_section_size-1 && placeholder!=0x0d)
 				throw sfexception();
 			if(i==date_section_size-1 && placeholder!=ACSERIALIZE_MAGIC_NUMBER)

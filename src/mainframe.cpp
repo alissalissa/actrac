@@ -185,6 +185,16 @@ void MainFrame::OnLoad(wxCommandEvent &evt){
 			delete selector_diag;
 			throw MFException();
 		}
+		std::vector<DVPair<std::string,float> > acs;
+		wxDateTime wx_today(time(NULL));
+		std::vector<Activity> selected_date_activities=this->activities_from_selected_date(wx_today);
+		for(auto activity : selected_date_activities){
+			DVPair <std::string,float> p(activity.Label(),activity.Hours());
+			acs.push_back(p);
+		}
+		activity_model->Rebuild(acs);
+		date_selector->SetDate(wx_today);
+		Refresh();
 	}
 	delete selector_diag;
 }
