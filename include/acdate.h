@@ -60,7 +60,7 @@ public:
 
 	//Container management
 	void AddActivity(Activity);
-	void AddActivity(std::string,std::string *t=NULL,float=1,bool=true,int=0,int=-1);
+	void AddActivity(std::string,std::vector<std::string>,float=1,bool=true,int=0,int=-1);
 	void RemoveActivity(ActivityID);
 
 	//operators

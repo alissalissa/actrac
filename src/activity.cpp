@@ -1,16 +1,11 @@
 #include "activity.h"
 
 //Constructors
-Activity::Activity(ActivityID i,std::string l,std::string *t,float h,bool c,int r,int rf){
+Activity::Activity(ActivityID i,std::string l,std::vector<std::string> t,float h,bool c,int r,int rf){
 	id=i;
 	label=l;
-	if(t){
-		int i=0;
-		while(t[i][0]!='\0'){
-			tags.push_back(t[i]);
-			i++;
-		}
-	}
+	for(auto nt : t)
+		tags.push_back(nt);
 	hours=h;
 	confirmed=c;
 	recurrences=r;
@@ -63,13 +58,8 @@ std::vector <Activity> Activity::propogate(void){
 		return ret;
 	}else{
 		for(int i=1;i<=recurrences;i++){
-			std::string *t=static_cast<std::string*>(calloc(tags.size()+1,sizeof(std::string)));
-			t[tags.size()]="\0";
-			for(int j=0;j<tags.size();j++)
-				t[j]=tags[j];
 			ActivityID nid(id.Index()+i,id.Label());
-			Activity ac(nid,label,t,hours,false,recurrences-i,recurrence_frq);
-			free(t);
+			Activity ac(nid,label,tags,hours,false,recurrences-i,recurrence_frq);
 			ret.push_back(ac);
 		}
 	}

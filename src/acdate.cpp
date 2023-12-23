@@ -135,7 +135,7 @@ void date::AddActivity(Activity a){
 	activities.push_back(a);
 }
 
-void date::AddActivity(std::string l,std::string *t,float h,bool c,int r,int rf){
+void date::AddActivity(std::string l,std::vector<std::string> t,float h,bool c,int r,int rf){
 	Activity ac(gen_ac_id(activities,l),l,t,h,c,r,rf);
 	activities.push_back(ac);
 }

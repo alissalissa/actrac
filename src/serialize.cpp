@@ -151,9 +151,7 @@ bool read_from_file(std::string filename,std::vector<date> &dates,std::vector<st
 				handle.read(reinterpret_cast<char*>(&recurrence_frq),sizeof(int32_t));
 				
 				ActivityID new_id(idn,label);
-				if(ac_tags.size()>0)
-					ac_tags.push_back("\0");
-				Activity ac(new_id,label,ac_tags.data(),hours,confirmed,recurrences,recurrence_frq);
+				Activity ac(new_id,label,ac_tags,hours,confirmed,recurrences,recurrence_frq);
 				date_buffer.AddActivity(ac);
 
 				handle.get(placeholder);

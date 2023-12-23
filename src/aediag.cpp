@@ -153,7 +153,7 @@ Activity AddEventDialog::get_generated_activity(ActivityID id_to_add){
 			ts.push_back(tag_entry->GetString(i).ToStdString());
 		ts.push_back("\0");
 	}
-	Activity ac(id_to_add,get_activity_label(),(ts.size()>0)?ts.data():NULL,static_cast<float>(hour_entry->GetValue()),true,0,-1);
+	Activity ac(id_to_add,get_activity_label(),ts,static_cast<float>(hour_entry->GetValue()),true,0,-1);
 	return ac;
 }
 
