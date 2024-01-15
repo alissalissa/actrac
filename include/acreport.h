@@ -18,9 +18,9 @@ public:
 
 class ACBaseReport {
 private:
-	std::map<std::string,float> process(std::vector<date>);
-	bool contains(std::string) const noexcept;
-	bool contains(std::map<std::string,float>,std::string);
+	virtual std::map<std::string,float> process(std::vector<date>);
+	virtual bool contains(std::string) const noexcept;
+	virtual bool contains(std::map<std::string,float>,std::string);
 protected:
 	std::map<std::string,float> data;
 
@@ -31,6 +31,6 @@ public:
 	ACBaseReport(const ACBaseReport&);
 
 	//Accessors
-	float point(std::string) const;
-	std::vector<std::string> labels(void) const;
+	virtual float point(std::string) const;
+	virtual std::vector<std::string> labels(void) const;
 };
