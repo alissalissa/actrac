@@ -5,9 +5,9 @@ WX_LIBS=`/usr/wx3.2.4/wx-dynamic-build/wx-config --libs`
 
 default: main
 
-main: main.o mainframe.o acdate.o activity.o aediag.o addtag.o idgen.o dvmodel.o serialize.o
+main: main.o mainframe.o acdate.o activity.o aediag.o addtag.o idgen.o dvmodel.o serialize.o acreport.o
 	$(info linking.....)
-	g++ -g -o actrac $(WX_LIBS) main.o addtag.o aediag.o mainframe.o dvmodel.o acdate.o activity.o idgen.o serialize.o
+	g++ -g -o actrac $(WX_LIBS) main.o addtag.o aediag.o mainframe.o dvmodel.o acdate.o activity.o idgen.o serialize.o acreport.o
 
 main.o: mainframe.o
 	$(info compiling main.cpp)
@@ -48,6 +48,10 @@ serialize.o: activity.o acdate.o
 #acutil.o:
 #	$(info compiling acutil.cpp)
 #	g++ -g -c -o acutil.o $(WX_INCLUDE_PATH) -I../include ../src/acutil.cpp
+
+acreport.o: activity.o acdate.o
+	$(info compiling acreport.cpp)
+	g++ -g -c -o acreport.o $(WX_INCLUDE_PATH) -I../include ../src/acreport.cpp
 
 clean:
 	rm *.o actrac
