@@ -65,3 +65,30 @@ std::vector<std::string> ACBaseReport::labels(void) const {
 		ret.push_back(p.first);
 	return ret;
 }
+
+//ACDateReport
+//private
+bool ACDateReport::contains_date(std::map<date,float> haystack,date delimiter){
+	if(haystack.empty())
+		return false;
+	for(auto p : haystack)
+		if(delimiter==p.first)
+			return true;
+	return false;
+}
+
+//protected
+std::map<date,float> ACDateReport::date_process(std::vector<date> haystack){
+	std::sort(haystack.begin(),haystack.end());
+	std::map<date,float> ret;
+	for(date d : haystack){
+		float total=0;
+		for(auto ac : d.Activities())
+			total+=ac.Hours();
+		if(contains_date(ret,d))
+			ret[d]+=total;
+		else
+			ret[d]=total;
+	}
+	return ret;
+}

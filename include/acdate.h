@@ -69,7 +69,7 @@ public:
 	bool operator==(wxDateTime);
 	bool operator!=(wxDateTime);
 	date operator=(date);
-	bool operator<(date);
+	bool operator<(date) const;
 	
 };
 

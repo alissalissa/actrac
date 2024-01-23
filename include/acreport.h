@@ -1,6 +1,7 @@
 //Class to handle report aggregation for all activities and dates
 #pragma once
 
+#include <algorithm>
 #include <exception>
 #include <map>
 #include <vector>
@@ -33,4 +34,21 @@ public:
 	//Accessors
 	virtual float point(std::string) const;
 	virtual std::vector<std::string> labels(void) const;
+};
+
+class ACDateReport : public ACBaseReport {
+private:
+	std::map<date,float> db_data; //date_based data
+	bool contains_date(std::map<date,float>,date);
+protected:
+	virtual std::map<date,float> date_process(std::vector<date>);
+public:
+	ACDateReport(void)=default;
+	ACDateReport(std::vector<date>);
+
+	//Accessors
+	virtual float date_point(date) const;
+	virtual std::vector<date> sorted_dates(void) const;
+	virtual date min(void) const;
+	virtual date max(void) const;
 };
