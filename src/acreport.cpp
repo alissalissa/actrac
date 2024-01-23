@@ -68,7 +68,7 @@ std::vector<std::string> ACBaseReport::labels(void) const {
 
 //ACDateReport
 //private
-bool ACDateReport::contains_date(std::map<date,float> haystack,date delimiter){
+bool ACDateReport::contains_date(std::map<date,float> haystack,date delimiter)const{
 	if(haystack.empty())
 		return false;
 	for(auto p : haystack)
@@ -91,4 +91,35 @@ std::map<date,float> ACDateReport::date_process(std::vector<date> haystack){
 			ret[d]=total;
 	}
 	return ret;
+}
+
+//Accessors
+float ACDateReport::date_point(date delimiter) const {
+	if(!contains_date(db_data,delimiter))
+		throw ACReportExcept();
+	return db_data.at(delimiter);
+}
+
+std::vector<date> ACDateReport::sorted_dates(void) const {
+	std::vector<date> ret;
+	if(db_data.empty())
+		return ret;
+	for(auto p : db_data)
+		ret.push_back(p.first);
+	std::sort(ret.begin(),ret.end());
+	return ret;
+}
+
+date ACDateReport::min(void) const {
+	if(db_data.empty())
+		throw ACReportExcept();
+	std::vector<date> ds=this->sorted_dates();
+	return ds[0];
+}
+
+date ACDateReport::max(void) const {
+	if(db_data.empty())
+		throw ACReportExcept();
+	std::vector<date> ds=this->sorted_dates();
+	return ds[ds.size()-1];
 }

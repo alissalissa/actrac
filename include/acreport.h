@@ -39,7 +39,7 @@ public:
 class ACDateReport : public ACBaseReport {
 private:
 	std::map<date,float> db_data; //date_based data
-	bool contains_date(std::map<date,float>,date);
+	bool contains_date(std::map<date,float>,date) const;
 protected:
 	virtual std::map<date,float> date_process(std::vector<date>);
 public:
