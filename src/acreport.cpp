@@ -93,6 +93,10 @@ std::map<date,float> ACDateReport::date_process(std::vector<date> haystack){
 	return ret;
 }
 
+ACDateReport::ACDateReport(std::vector<date> haystack) : ACBaseReport(haystack) {
+	db_data=date_process(haystack);
+}
+
 //Accessors
 float ACDateReport::date_point(date delimiter) const {
 	if(!contains_date(db_data,delimiter))
