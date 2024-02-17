@@ -21,7 +21,7 @@ Windows:<br>
 This project is released under the terms of the GNU General Public License.
 See LICENSE for details.
 
-This project is massively still under development.  No guarentees are made is to the quality of the code or executable, and if you choose to run this code on your system, you do so at your own risk.
+This project is massively still under development.  No guarentees are made as to the quality of the code or executable, and if you choose to run this code on your system, you do so at your own risk.
 
 ## Future Directions
 Eventually, I'll figure out how to build this software on Windows.  Feel free to make a PR to update this file if you know how to do it.
