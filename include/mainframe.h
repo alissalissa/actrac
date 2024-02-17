@@ -38,6 +38,7 @@
 #include "acutil.h"
 #include "dvmodel.h"
 #include "idgen.h"
+#include "rpanel.h"
 #include "serialize.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -62,7 +63,7 @@ private:
 	wxButton* edit_event_btn;
 	wxCalendarCtrl* date_selector;
 	wxButton *today_button;
-	wxPanel* report_panel;
+	ReportPanel* report_panel;
 	wxMenuBar* menu_bar;
 	wxMenu* file_menu;
 	DVModel *activity_model;

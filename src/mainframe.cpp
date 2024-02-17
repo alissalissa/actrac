@@ -63,7 +63,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	tracker_panel->Layout();
 	bSizer2->Fit( tracker_panel );
 	view_selector->AddPage( tracker_panel, wxT("Activities"), true );
-	report_panel = new wxPanel( view_selector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_RAISED|wxTAB_TRAVERSAL, wxT("Reports") );
+	report_panel = new ReportPanel(view_selector);
 	view_selector->AddPage( report_panel, wxT("Reports"), false );
 
 	main_sizer->Add( view_selector, 1, wxEXPAND | wxALL, 5 );
