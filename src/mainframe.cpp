@@ -86,6 +86,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	selected_row=-1;
 
 	// Connect Events
+	view_selector->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( MainFrame::OnPageSelect ), NULL, this );
 	edit_event_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
 	delete_event_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainFrame::OnRemoveEvent),NULL,this);
 	file_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnQuit ), this, file_menu_quit->GetId());
@@ -99,6 +100,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 
 MainFrame::~MainFrame(void) {
 	// Disconnect Events
+	view_selector->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( MainFrame::OnPageSelect ), NULL, this );
 	add_evt_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnAddEvent ), NULL, this );
 	otd_activities->Disconnect(wxEVT_DATAVIEW_SELECTION_CHANGED,wxDataViewEventHandler(MainFrame::OnSelectActivity),NULL,this);
 	edit_event_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnEditEvent ), NULL, this );
@@ -354,6 +356,10 @@ void MainFrame::OnSelectDate(wxCalendarEvent &evt){
 	Refresh();
 }
 
+void MainFrame::OnPageSelect(wxNotebookEvent &evt){
+
+}
+
 std::vector<Activity> MainFrame::activities_from_selected_date(wxDateTime wx_selected){
 	date selected(wx_selected);
 	std::vector<Activity> ret;
@@ -385,6 +391,5 @@ std::vector<Activity> MainFrame::activities_from_selected_date(wxDateTime wx_sel
 
 //MFException stuff
 const char *MFException::what(void) const noexcept {
-	const std::string message="Exception thrown within the MainFrame class.";
-	return message.c_str();
+	return "Exception thrown within the MainFrame class.";
 }

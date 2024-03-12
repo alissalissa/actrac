@@ -77,6 +77,7 @@ private:
 	void OnSelectActivity(wxDataViewEvent&);
 	void OnSelectDate(wxCalendarEvent&);
 	void OnToday(wxCommandEvent&);
+	void OnPageSelect(wxNotebookEvent&);
 
 	//Intternal model/view
 	std::vector <date> utilized_dates;
