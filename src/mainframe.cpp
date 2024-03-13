@@ -2,8 +2,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
-{
+MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style ) {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
 	wxBoxSizer* main_sizer;
@@ -357,7 +356,7 @@ void MainFrame::OnSelectDate(wxCalendarEvent &evt){
 }
 
 void MainFrame::OnPageSelect(wxNotebookEvent &evt){
-
+	report_panel->updateBackend(utilized_dates);
 }
 
 std::vector<Activity> MainFrame::activities_from_selected_date(wxDateTime wx_selected){

@@ -40,9 +40,13 @@ void ReportPanel::DrawHistogramAxes(wxClientDC &dc){
 }
 
 void ReportPanel::DrawHistogramLabels(wxClientDC &dc){
+	dc.SetFont(*wxNORMAL_FONT);
+	dc.SetTextForeground(*wxBLACK);
 	if(!data.empty()){
 		ACDateReport rep(data);
 		wxString min_label(rep.min().toStdStr());
-		dc.DrawLabel(min_label,wxRect(100,110,10,5));																		
+		wxCoord xw=0,yw=0;
+		dc.GetSize(&xw,&yw);
+		dc.DrawText(min_label,100,yw-40);																		
 	}
 }
