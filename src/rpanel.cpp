@@ -13,7 +13,7 @@ void ReportPanel::OnPaint(wxPaintEvent &evt){
 }
 
 void ReportPanel::updateBackend(std::vector<date> haystack){
-	data=haystack;
+	data=new ACDateReport(haystack);
 }
 
 //Renderer
@@ -42,11 +42,16 @@ void ReportPanel::DrawHistogramAxes(wxClientDC &dc){
 void ReportPanel::DrawHistogramLabels(wxClientDC &dc){
 	dc.SetFont(*wxNORMAL_FONT);
 	dc.SetTextForeground(*wxBLACK);
-	if(!data.empty()){
-		ACDateReport rep(data);
-		wxString min_label(rep.min().toStdStr());
-		wxCoord xw=0,yw=0;
-		dc.GetSize(&xw,&yw);
-		dc.DrawText(min_label,100,yw-40);																		
+	try{
+		if(!data->empty()){
+			wxString min_label(data->left_label());
+			wxString max_label(data->right_label());
+			wxCoord xw=0,yw=0;
+			dc.GetSize(&xw,&yw);
+			dc.DrawText(min_label,100,yw-40);
+			dc.DrawText(max_label,xw-70,yw-40);
+		}
+	}catch(ACReportExcept e){
+		std::cout<<"ACReportExcept caught....\n"<<std::endl;
 	}
 }

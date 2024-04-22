@@ -1,6 +1,7 @@
 //The panel to draw report data
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 #include <wx/wx.h>
@@ -12,7 +13,7 @@
 class ReportPanel : public wxPanel {
 private:
 
-	std::vector<date> data;
+	ACBaseReport *data;
 
 	void DrawHistogramAxes(wxClientDC&);
 	void DrawHistogramLabels(wxClientDC&);

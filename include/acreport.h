@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <exception>
 #include <map>
+#include <string>
 #include <vector>
 
 #include "acdate.h"
@@ -34,6 +35,13 @@ public:
 	//Accessors
 	virtual float point(std::string) const;
 	virtual std::vector<std::string> labels(void) const;
+	virtual date min(void) const = 0;
+	virtual date max(void) const = 0;
+	virtual std::string left_label(void) const = 0;
+	virtual std::string right_label(void) const = 0;
+
+	//Checkers
+	virtual bool empty(void);
 };
 
 class ACDateReport : public ACBaseReport {
@@ -51,4 +59,6 @@ public:
 	virtual std::vector<date> sorted_dates(void) const;
 	virtual date min(void) const;
 	virtual date max(void) const;
+	virtual std::string left_label(void) const;
+	virtual std::string right_label(void) const;
 };

@@ -66,6 +66,11 @@ std::vector<std::string> ACBaseReport::labels(void) const {
 	return ret;
 }
 
+//Checkers
+bool ACBaseReport::empty(void){
+	return data.empty();
+}
+
 //ACDateReport
 //private
 bool ACDateReport::contains_date(std::map<date,float> haystack,date delimiter)const{
@@ -126,4 +131,20 @@ date ACDateReport::max(void) const {
 		throw ACReportExcept();
 	std::vector<date> ds=this->sorted_dates();
 	return ds[ds.size()-1];
+}
+
+std::string ACDateReport::left_label(void) const {
+	try{
+		return this->min().toStdStr();
+	}catch(ACReportExcept e){
+		throw e;
+	}
+}
+
+std::string ACDateReport::right_label(void) const {
+	try{
+		return this->max().toStdStr();
+	}catch(ACReportExcept e){
+		throw e;
+	}
 }
