@@ -2,7 +2,7 @@
 #include "rpanel.h"
 
 //Constructors/destructor
-ReportPanel::ReportPanel(wxWindow *master) : wxPanel(master){
+ReportPanel::ReportPanel(wxWindow *master) : wxPanel(master,wxID_ANY,wxDefaultPosition,wxSize(500,500)){
 	Bind(wxEVT_PAINT,&ReportPanel::OnPaint,this,wxID_ANY);
 }
 

@@ -62,7 +62,20 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	tracker_panel->Layout();
 	bSizer2->Fit( tracker_panel );
 	view_selector->AddPage( tracker_panel, wxT("Activities"), true );
-	report_panel = new ReportPanel(view_selector);
+	report_panel = new wxPanel( view_selector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_RAISED|wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL, wxT("Reports") );
+	drawer_panel = new ReportPanel(report_panel);
+	wxFlexGridSizer* fgSizer2 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxString m_radioBox1Choices[] = { wxT("Tags"), wxT("Dates") };
+	int m_radioBox1NChoices = sizeof( m_radioBox1Choices ) / sizeof( wxString );
+	report_radio = new wxRadioBox( report_panel, wxID_ANY, wxT("Report Type"), wxDefaultPosition, wxDefaultSize, m_radioBox1NChoices, m_radioBox1Choices, 1, wxRA_SPECIFY_COLS );
+	report_radio->SetSelection( 1 );
+	fgSizer2->Add(report_radio, 0, wxALL, 5 );
+	fgSizer2->Add(drawer_panel, 1, wxEXPAND | wxALL, 5 );
+	report_panel->SetSizer( fgSizer2 );
+	report_panel->Layout();
+	fgSizer2->Fit( report_panel );
 	view_selector->AddPage( report_panel, wxT("Reports"), false );
 
 	main_sizer->Add( view_selector, 1, wxEXPAND | wxALL, 5 );
@@ -356,7 +369,7 @@ void MainFrame::OnSelectDate(wxCalendarEvent &evt){
 }
 
 void MainFrame::OnPageSelect(wxNotebookEvent &evt){
-	report_panel->updateBackend(utilized_dates);
+	drawer_panel->updateBackend(utilized_dates);
 }
 
 std::vector<Activity> MainFrame::activities_from_selected_date(wxDateTime wx_selected){

@@ -29,6 +29,7 @@
 #include <wx/notebook.h>
 #include <wx/menu.h>
 #include <wx/frame.h>
+#include <wx/radiobox.h>
 
 #include <wx/wx.h>
 
@@ -58,12 +59,14 @@ private:
 	wxDataViewColumn* activity_time;
 	wxNotebook* view_selector;
 	wxPanel* tracker_panel;
+	wxPanel *report_panel;
+	wxRadioBox *report_radio;
 	wxButton* add_evt_btn;
 	wxButton* delete_event_btn;
 	wxButton* edit_event_btn;
 	wxCalendarCtrl* date_selector;
 	wxButton *today_button;
-	ReportPanel* report_panel;
+	ReportPanel* drawer_panel;
 	wxMenuBar* menu_bar;
 	wxMenu* file_menu;
 	DVModel *activity_model;
