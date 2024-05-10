@@ -62,6 +62,7 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 
 	this->SetSizer( fgSizer1 );
 	this->Layout();
+	this->Fit();
 
 	this->Centre( wxBOTH );
 

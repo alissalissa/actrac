@@ -3,9 +3,9 @@
 WX_INCLUDE_PATH=`/usr/wx3.2.4/wx-dynamic-build/wx-config --cppflags`
 WX_LIBS=`/usr/wx3.2.4/wx-dynamic-build/wx-config --libs`
 
-default: main
+default: all
 
-main: main.o mainframe.o rpanel.o acdate.o activity.o aediag.o addtag.o idgen.o dvmodel.o serialize.o acreport.o
+all: main.o mainframe.o rpanel.o acdate.o activity.o aediag.o addtag.o idgen.o dvmodel.o serialize.o acreport.o
 	$(info linking.....)
 	g++ -g -o actrac $(WX_LIBS) main.o addtag.o aediag.o mainframe.o dvmodel.o acdate.o activity.o idgen.o serialize.o acreport.o rpanel.o
 

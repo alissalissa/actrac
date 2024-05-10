@@ -94,6 +94,9 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	menu_bar->Append( file_menu, wxT("File") );
 
 	this->SetMenuBar( menu_bar );
+	tracker_panel->Fit();
+	view_selector->Fit();
+	//this->Fit();
 	this->Centre( wxBOTH );
 	selected_row=-1;
 

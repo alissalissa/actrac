@@ -39,7 +39,8 @@ AddTagDialog::AddTagDialog( wxWindow* parent, std::vector<std::string> tc,wxWind
 	this->Layout();
 
 	this->Centre( wxBOTH );
-
+	this->Fit();
+	
 	// Connect Events
 	ok_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddTagDialog::OnOK ), NULL, this );
 	m_button9->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddTagDialog::OnCancel ), NULL, this );
