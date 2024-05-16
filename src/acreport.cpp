@@ -1,4 +1,6 @@
 #include "acreport.h"
+#include "../include/acreport.h"
+
 
 //Exceptions
 ACReportExcept::ACReportExcept(void) : std::exception() {
@@ -63,12 +65,27 @@ std::vector<std::string> ACBaseReport::labels(void) const {
 	std::vector<std::string> ret;
 	for(auto p : data)
 		ret.push_back(p.first);
+	std::sort(ret.begin(),ret.end());
+	return ret;
+}
+
+std::vector<std::string> ACBaseReport::trim_labels(void) const {
+	std::vector<std::string> ret=this->labels();
+	auto it= ret.begin();
+	ret.erase(it);
+	it=ret.begin();
+	for(size_t i=0;i<ret.size();i++) ++it;
+	ret.erase(it);
 	return ret;
 }
 
 //Checkers
 bool ACBaseReport::empty(void){
 	return data.empty();
+}
+
+size_t ACBaseReport::size(void){
+	return data.size();
 }
 
 //ACDateReport

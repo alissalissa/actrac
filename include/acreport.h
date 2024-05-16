@@ -35,6 +35,7 @@ public:
 	//Accessors
 	virtual float point(std::string) const;
 	virtual std::vector<std::string> labels(void) const;
+	virtual std::vector<std::string> trim_labels(void) const;
 	virtual date min(void) const = 0;
 	virtual date max(void) const = 0;
 	virtual std::string left_label(void) const = 0;
@@ -42,6 +43,7 @@ public:
 
 	//Checkers
 	virtual bool empty(void);
+	virtual size_t size(void);
 };
 
 class ACDateReport : public ACBaseReport {

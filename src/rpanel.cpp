@@ -1,5 +1,6 @@
 //Implementation of the report panel
 #include "rpanel.h"
+#include "../include/rpanel.h"
 
 //Constructors/destructor
 ReportPanel::ReportPanel(wxWindow *master) : wxPanel(master,wxID_ANY,wxDefaultPosition,wxSize(700,500)){
@@ -50,6 +51,19 @@ void ReportPanel::DrawHistogramLabels(wxClientDC &dc){
 			dc.GetSize(&xw,&yw);
 			dc.DrawText(min_label,100,yw-40);
 			dc.DrawText(max_label,xw-70,yw-40);
+			
+			if(data->size()>2){
+				//Generate a vector of labels
+				std::vector <wxString> points;
+				for(auto l : data->trim_labels()){
+					wxString buf(l);
+					points.push_back(buf);
+				}
+				//spacing
+				float interval=static_cast<float>(xw)/static_cast<float>(points.size());
+				for(size_t i=0;i<points.size();i++)
+					dc.DrawText(points[i],100+(interval*i),yw-40);
+			}
 		}
 	}catch(ACReportExcept e){
 		std::cout<<"ACReportExcept caught....\n"<<std::endl;

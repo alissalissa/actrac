@@ -79,7 +79,8 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	view_selector->AddPage( report_panel, wxT("Reports"), false );
 
 	main_sizer->Add( view_selector, 1, wxEXPAND | wxALL, 5 );
-
+	main_sizer->Fit(view_selector);
+	
 	this->SetSizer( main_sizer );
 	this->Layout();
 	menu_bar = new wxMenuBar( 0 );

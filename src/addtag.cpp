@@ -30,10 +30,8 @@ AddTagDialog::AddTagDialog( wxWindow* parent, std::vector<std::string> tc,wxWind
 
 	m_button9 = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_button9, 0, wxALL, 5 );
-
-
+	
 	bSizer7->Add( bSizer8, 1, wxEXPAND, 5 );
-
 
 	this->SetSizer( bSizer7 );
 	this->Layout();
