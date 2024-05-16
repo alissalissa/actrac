@@ -60,7 +60,7 @@ void ReportPanel::DrawHistogramLabels(wxClientDC &dc){
 					points.push_back(buf);
 				}
 				//spacing
-				float interval=static_cast<float>(xw)/static_cast<float>(points.size());
+				float interval=static_cast<float>(xw)/static_cast<float>(points.size()+1);
 				for(size_t i=0;i<points.size();i++)
 					dc.DrawText(points[i],100+(interval*i),yw-40);
 			}
