@@ -252,7 +252,7 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 				std::vector<date>::iterator insertion_iterator=utilized_dates.begin();
 				for(int i=1;i<=insertion_point;i++) insertion_iterator++;
 				utilized_dates.insert(insertion_iterator,new_date);
-				//Now we know for sure the date exissts
+				//Now we know for sure the date exists
 				int index=binary_search<date>(utilized_dates,new_date);
 				new_id=gen_ac_id(new_date.Activities(),diag->get_activity_label());
 				utilized_dates[index].AddActivity(diag->get_generated_activity(new_id));

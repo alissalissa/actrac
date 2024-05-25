@@ -22,7 +22,9 @@ template <class T> int binary_search(std::vector<T> haystack,T delimiter){
 		std::vector<T> next_haystack;
 		for(int i=(haystack.size()/2);i<haystack.size();i++)
 			next_haystack.push_back(haystack[i]);
-		return binary_search<T>(next_haystack,delimiter)+next_haystack.size();
+		int ind=binary_search<T>(next_haystack,delimiter);
+		ind+=(next_haystack.size()-1);;
+		return ind;
 	}
 	return haystack.size()/2;
 }

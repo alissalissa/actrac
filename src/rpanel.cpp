@@ -1,5 +1,4 @@
 //Implementation of the report panel
-#include "rpanel.h"
 #include "../include/rpanel.h"
 
 //Constructors/destructor
