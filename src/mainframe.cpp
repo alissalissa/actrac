@@ -247,13 +247,25 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 			}else{
 				//We need to create a new date
 				date new_date(date_selector->GetDate());
+				std::cout<<"Inserting date at "<<new_date.toStdStr()<<std::endl;
 				//Get our insertion point
+				std::cout<<"Searching the following list:"<<std::endl;
+				for(auto d : utilized_dates)
+					std::cout<<d.toStdStr()<<std::endl;
+				std::cout<<"/LIST"<<std::endl;
 				int insertion_point=binary_search<date>(utilized_dates,new_date);
-				std::vector<date>::iterator insertion_iterator=utilized_dates.begin();
-				for(int i=1;i<=insertion_point;i++) insertion_iterator++;
-				utilized_dates.insert(insertion_iterator,new_date);
+				std::cout<<"Found insertion point -> "<<insertion_point<<std::endl;
+				if(insertion_point==utilized_dates.size()) {
+					utilized_dates.push_back(new_date);
+				} else {
+					std::vector<date>::iterator insertion_iterator = utilized_dates.begin();
+					for (int i = 1; i <= insertion_point; i++) insertion_iterator++;
+					utilized_dates.insert(insertion_iterator, new_date);
+				}
 				//Now we know for sure the date exists
 				int index=binary_search<date>(utilized_dates,new_date);
+				std::cout<<utilized_dates.size()<<" dates to search.\nExtent date search index: "<<index<<std::endl;
+				if(index==utilized_dates.size()) index--;
 				new_id=gen_ac_id(new_date.Activities(),diag->get_activity_label());
 				utilized_dates[index].AddActivity(diag->get_generated_activity(new_id));
 				std::vector<DVPair<std::string,float> > new_model;
@@ -384,10 +396,13 @@ std::vector<Activity> MainFrame::activities_from_selected_date(wxDateTime wx_sel
 			return ret;
 		//We know there's at least one date
 		int date_match_index=binary_search<date>(utilized_dates,selected);
-		if(date_match_index==utilized_dates.size()){
+		
+		if(utilized_dates.size()==0){
 			//We know the date doesn't exist, since the search is punting to the end of the vector
 			return ret;
 		}
+		if(date_match_index==utilized_dates.size())
+			date_match_index--;
 		if(utilized_dates[date_match_index]!=selected){
 			//The date doesn't exist
 			return ret;

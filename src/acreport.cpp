@@ -44,7 +44,6 @@ std::map<std::string,float> ACBaseReport::process(std::vector<date> haystack){
 		return ret;
 	for(date current_date : haystack){
 		for(auto ac : current_date.Activities()){
-			//TODO We need a way to tell if a map contains a key
 			if(this->contains(ret,ac.Label()))
 				ret[ac.Label()]+=ac.Hours();
 			else
