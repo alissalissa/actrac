@@ -41,7 +41,7 @@ private:
 	std::vector <Activity> activities;
 
 	//utilities
-	std::vector<std::string> split(std::string,std::string);
+	std::vector<std::string> split(std::string,std::string) const;
 
 public:
 	//Constructors/destructors
@@ -55,7 +55,7 @@ public:
 	short &Day(void);
 	month_t &Month(void);
 	short &Year(void);
-	std::string toStdStr(std::string="%mm%dd%yy");
+	std::string toStdStr(std::string="%mm%dd%yy") const;
 	std::vector<Activity> &Activities(void);
 
 	//Container management

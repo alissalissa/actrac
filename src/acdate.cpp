@@ -32,7 +32,7 @@ month_t &date::Month(void){return month;}
 short &date::Year(void){return year;}
 std::vector<Activity> &date::Activities(void){return activities;}
 
-std::string date::toStdStr(std::string format){
+std::string date::toStdStr(std::string format) const {
 	std::ostringstream output;
 	std::vector<std::string> components=split(format,"%");
 	if(components.size()!=4)
@@ -156,7 +156,7 @@ void date::RemoveActivity(ActivityID idtr){
 }
 
 //Utilities
-std::vector<std::string> date::split(std::string h,std::string delimiter){
+std::vector<std::string> date::split(std::string h,std::string delimiter) const {
 	std::string haystack(h);
 	std::vector<std::string> ret;
 	while(haystack.find(delimiter)!=std::string::npos){

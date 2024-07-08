@@ -73,7 +73,7 @@ std::vector<std::string> ACBaseReport::trim_labels(void) const {
 	auto it= ret.begin();
 	ret.erase(it);
 	it=ret.begin();
-	for(size_t i=0;i<ret.size();i++) ++it;
+	for(size_t i=1;i<ret.size();i++) ++it;
 	ret.erase(it);
 	return ret;
 }
@@ -163,4 +163,22 @@ std::string ACDateReport::right_label(void) const {
 	}catch(ACReportExcept e){
 		throw e;
 	}
+}
+
+std::vector<std::string> ACDateReport::labels(void) const {
+	std::vector<std::string> ret;
+	for(auto p : db_data)
+		ret.push_back(p.first.toStdStr());
+	std::sort(ret.begin(),ret.end());
+	return ret;
+}
+
+std::vector<std::string> ACDateReport::trim_labels() const {
+	std::vector<std::string> ret=this->labels();
+	auto it= ret.begin();
+	ret.erase(it);
+	it=ret.begin();
+	for(size_t i=1;i<ret.size();i++) ++it;
+	ret.erase(it);
+	return ret;
 }

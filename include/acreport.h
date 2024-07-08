@@ -63,4 +63,6 @@ public:
 	virtual date max(void) const;
 	virtual std::string left_label(void) const;
 	virtual std::string right_label(void) const;
+	[[nodiscard]] std::vector<std::string> labels(void) const override;
+	[[nodiscard]] std::vector<std::string> trim_labels(void) const override;
 };
