@@ -61,7 +61,7 @@ void ReportPanel::DrawHistogramLabels(wxClientDC &dc){
 				//spacing
 				float interval=static_cast<float>(xw)/static_cast<float>(points.size()+1);
 				for(size_t i=0;i<points.size();i++)
-					dc.DrawText(points[i],50+(interval*(i+1)),yw-40); //Only 50 added to x to account for the axes stopping 50px short of the edge
+					dc.DrawText(points[i],30+(interval*(i+1)),yw-40); //Only 50 added to x to account for the axes stopping 50px short of the edge
 			}
 		}
 	}catch(ACReportExcept e){

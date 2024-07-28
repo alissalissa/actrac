@@ -265,7 +265,8 @@ void MainFrame::OnAddEvent(wxCommandEvent &evt){
 				//Now we know for sure the date exists
 				int index=binary_search<date>(utilized_dates,new_date);
 				std::cout<<utilized_dates.size()<<" dates to search.\nExtent date search index: "<<index<<std::endl;
-				if(index==END_INDEX) index=utilized_dates.size()-1;
+				if(index==END_INDEX) //This should ideally never evaluate to true
+					index=utilized_dates.size()-1;
 				new_id=gen_ac_id(new_date.Activities(),diag->get_activity_label());
 				utilized_dates[index].AddActivity(diag->get_generated_activity(new_id));
 				std::vector<DVPair<std::string,float> > new_model;
