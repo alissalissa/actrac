@@ -59,7 +59,9 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 	cancel_btn = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( cancel_btn, 0, wxALL, 5 );
 
-
+	ok_btn->Enable(false);
+	cancel_btn->Enable(true);
+	
 	this->SetSizer( fgSizer1 );
 	this->Layout();
 	this->Fit();
@@ -68,6 +70,8 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 
 	// Connect Events
 	tag_entry->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( AddEventDialog::OnSelect ), NULL, this );
+	ac_label_entry->Connect(wxEVT_TEXT,wxCommandEventHandler(AddEventDialog::OnFieldChanged),NULL,this);
+	hour_entry->Connect(wxEVT_TEXT,wxCommandEventHandler(AddEventDialog::OnFieldChanged),NULL,this);
 	ok_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnOK ), NULL, this );
 	cancel_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
 }
@@ -76,6 +80,8 @@ AddEventDialog::~AddEventDialog(void){
 	// Disconnect Events
 	ok_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnOK ), NULL, this );
 	cancel_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
+	ac_label_entry->Disconnect(wxEVT_TEXT,wxCommandEventHandler(AddEventDialog::OnFieldChanged),NULL,this);
+	hour_entry->Disconnect(wxEVT_TEXT,wxCommandEventHandler(AddEventDialog::OnFieldChanged),NULL,this);
 	tag_entry->Disconnect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
 	tag_entry->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( AddEventDialog::OnSelect ), NULL, this );
 }
@@ -144,6 +150,15 @@ void AddEventDialog::OnEditTag(wxCommandEvent &event){
 		tag_entry->Refresh();
 		this->Refresh();
 	}
+}
+
+void AddEventDialog::OnFieldChanged(wxCommandEvent &evt){
+	std::string label=ac_label_entry->GetValue().ToStdString();
+	float t=static_cast<float>(hour_entry->GetValue());
+	if(label.length()>0 && t>0)
+		ok_btn->Enable(true);
+	else
+		ok_btn->Enable(false);
 }
 
 //Accessors

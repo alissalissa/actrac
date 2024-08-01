@@ -36,7 +36,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class AddEventDialog
 ///////////////////////////////////////////////////////////////////////////////
-//TODO submit button should be disabled until fields are filled
 //TODO add in recurring events
 class AddEventDialog : public wxDialog{
 private:
@@ -64,6 +63,7 @@ private:
     void OnCancel( wxCommandEvent& event );
 	void OnSelect( wxCommandEvent& event );
 	void OnEditTag( wxCommandEvent& event );
+	void OnFieldChanged(wxCommandEvent &evt);
 
 public:
 
