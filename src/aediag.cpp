@@ -1,4 +1,4 @@
-#include "aediag.h"
+#include "../include/aediag.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -8,7 +8,7 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 	cache=tc;
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 4, 2, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 5, 2, 0, 0 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 
@@ -46,11 +46,18 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 	tag_entry->Connect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
 	
 	fgSizer1->Add( tag_entry, 0, wxALL, 5 );
-
+	
 	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(AddEventDialog::OnAddTag), this, add_tag->GetId());
 	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( AddEventDialog::OnRemoveTag ), this, delete_tag->GetId());
 	tag_entry_context_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( AddEventDialog::OnEditTag ), this, edit_tag->GetId());
-
+	
+	m_staticText6 = new wxStaticText( this, wxID_ANY, wxT("Make this a recurring event?"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	fgSizer1->Add( m_staticText6, 0, wxALL, 5 );
+	
+	recurring_check = new wxCheckBox( this, wxID_ANY, wxT("Recurring Event"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( recurring_check, 0, wxALL, 5 );
+	
 	ok_btn = new wxButton( this, wxID_ANY, wxT("Submit!"), wxDefaultPosition, wxDefaultSize, 0 );
 
 	ok_btn->SetDefault();
@@ -74,6 +81,7 @@ AddEventDialog::AddEventDialog(wxWindow* parent, std::vector<std::string> tc, wx
 	hour_entry->Connect(wxEVT_TEXT,wxCommandEventHandler(AddEventDialog::OnFieldChanged),NULL,this);
 	ok_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnOK ), NULL, this );
 	cancel_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( AddEventDialog::OnCancel ), NULL, this );
+	recurring_check->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( AddEventDialog::OnMakeRecurring ), NULL, this );
 }
 
 AddEventDialog::~AddEventDialog(void){
@@ -84,6 +92,7 @@ AddEventDialog::~AddEventDialog(void){
 	hour_entry->Disconnect(wxEVT_TEXT,wxCommandEventHandler(AddEventDialog::OnFieldChanged),NULL,this);
 	tag_entry->Disconnect(wxEVT_CONTEXT_MENU,wxContextMenuEventHandler(AddEventDialog::OnContextClick),NULL,this);
 	tag_entry->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( AddEventDialog::OnSelect ), NULL, this );
+	recurring_check->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( AddEventDialog::OnMakeRecurring ), NULL, this );
 }
 
 //Event management
@@ -159,6 +168,17 @@ void AddEventDialog::OnFieldChanged(wxCommandEvent &evt){
 		ok_btn->Enable(true);
 	else
 		ok_btn->Enable(false);
+}
+
+[[maybe_unused]] void AddEventDialog::OnMakeRecurring(wxCommandEvent &event) {
+	if(recurring_check->IsChecked()){
+		AddRecurrenceDialog *diag=new AddRecurrenceDialog(this);
+		if(diag->ShowModal()==wxOK){
+			std::cout<<"Make recurrence OK!"<<std::endl;
+		}else{
+			std::cout<<"Make recurrence cancelled!"<<std::endl;
+		}
+	}
 }
 
 //Accessors

@@ -25,9 +25,11 @@
 #include <wx/dialog.h>
 #include <wx/spinctrl.h>
 #include <wx/menu.h>
+#include <wx/checkbox.h>
 
 #include "activity.h"
 #include "addtag.h"
+#include "ardiag.h"
 #include "idgen.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,6 +54,8 @@ private:
 	wxMenuItem *edit_tag;
 	wxButton* ok_btn;
 	wxButton* cancel_btn;
+	wxStaticText* m_staticText6;
+	wxCheckBox* recurring_check;
 
 	std::vector<std::string> cache;
 
@@ -64,6 +68,8 @@ private:
 	void OnSelect( wxCommandEvent& event );
 	void OnEditTag( wxCommandEvent& event );
 	void OnFieldChanged(wxCommandEvent &evt);
+	
+	[[maybe_unused]] void OnMakeRecurring( wxCommandEvent& event );
 
 public:
 

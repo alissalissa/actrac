@@ -3,7 +3,8 @@
 ///////////////////////////////////////////////////////////////////////////
 
 MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style ) {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSize(size);
+	this->SetSizeHints(size);
 
 	wxBoxSizer* main_sizer;
 	main_sizer = new wxBoxSizer( wxVERTICAL );

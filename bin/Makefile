@@ -5,9 +5,9 @@ WX_LIBS=`/usr/wx3.2.5/wx-dynamic-build/wx-config --libs`
 
 default: all
 
-all: main.o mainframe.o rpanel.o acdate.o activity.o aediag.o addtag.o idgen.o dvmodel.o serialize.o acreport.o
+all: main.o mainframe.o rpanel.o acdate.o activity.o aediag.o addtag.o idgen.o dvmodel.o serialize.o acreport.o aediag.o
 	$(info linking.....)
-	g++ -g -o actrac $(WX_LIBS) main.o addtag.o aediag.o mainframe.o dvmodel.o acdate.o activity.o idgen.o serialize.o acreport.o rpanel.o
+	g++ -g -o actrac $(WX_LIBS) main.o addtag.o aediag.o ardiag.o mainframe.o dvmodel.o acdate.o activity.o idgen.o serialize.o acreport.o rpanel.o
 
 main.o: mainframe.o
 	$(info compiling main.cpp)
@@ -29,7 +29,7 @@ idgen.o:
 	$(info compiling idgen.cpp)
 	g++ -g -c -o idgen.o -I../include ../src/idgen.cpp
 
-aediag.o: addtag.o
+aediag.o: addtag.o ardiag.o
 	$(info compiling aediag.cpp)
 	g++ -g -c -o aediag.o $(WX_INCLUDE_PATH) -I../include ../src/aediag.cpp
 
@@ -56,6 +56,10 @@ acreport.o: activity.o acdate.o
 rpanel.o: acreport.o
 	$(info compiling rpanel.cpp)
 	g++ -g -c -o rpanel.o $(WX_INCLUDE_PATH) -I../include ../src/rpanel.cpp
+
+ardiag.o:
+	$(info compiling ardiag.cpp)
+	g++ -g -c -o ardiag.o $(WX_INCLUDE_PATH) -I../include ../src/ardiag.cpp
 
 clean:
 	rm *.o actrac
